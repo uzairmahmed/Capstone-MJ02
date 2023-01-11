@@ -5,33 +5,33 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 const data = [
     {
       week: 'January 7-14',
-      money_spent: 40,
+      watts: 4,
       
     },
     {
       week: 'Febuary 14-28',
-      money_spent: 50,
+      watts: 5,
       
     },
     {
       week: 'March 1-8',
-      money_spent: 70,
+      watts: 7,
       
     },
     {
       week: 'April 7-14',
-      money_spent: 45,
+      watts: 4.5,
       
     },
   ];
   
-function Moneyspentonpowergraph (){
+function Powerusagegraph (){
     return(
         <div>
             <Navbar />
 
             <div className="py-5">
-                <h1 className="text-4xl text-center">Money Spent On Power Graph</h1>
+                <h1 className="text-4xl text-center">Power Usage Graph</h1>
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                     <LineChart
                     width={500}
@@ -45,11 +45,11 @@ function Moneyspentonpowergraph (){
                     }}
                     >
                     <CartesianGrid strokeDasharray="1 " horizontal="true" vertical = ""/>
-                    <XAxis dataKey="week" label={{ value: 'Time (week)', position: 'insideBottom' }}/>
-                    <YAxis label={{ value: 'Amount Spent ($)', angle: -90, position: 'insideLeft' }}/>
+                    <XAxis dataKey="week" label={{ value: 'Time (hours)', position: 'insideBottom' }}/>
+                    <YAxis label={{ value: 'Power Usage (Watts)', angle: -90, position: 'insideLeft' }}/>
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="money_spent" stroke="#8884d8" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="watts" stroke="#8884d8" activeDot={{ r: 8 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
@@ -57,5 +57,5 @@ function Moneyspentonpowergraph (){
     );
 }
 
-export default Moneyspentonpowergraph;
+export default Powerusagegraph;
 

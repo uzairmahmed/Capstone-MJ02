@@ -13,11 +13,17 @@ export const Navbar = () => {
             <div className='flex items-center'>
                 <h1 className='text-3xl font-bold mr-4 sm:text-4xl'>Capstone MJ02</h1>
                 <ul className='hidden md:flex'>
+
                     <li className='px-3'> 
                         <Link to='/'>Main Page</Link> 
                     </li>
+
                     <li className='px-3'> 
-                        <Link to='/moneyspentonpowergraph'>Money spent on power graph</Link> 
+                        <Link to='/money_spent_on_power_graph'>Money spent on power graph</Link> 
+                    </li>
+
+                    <li className='px-3'> 
+                        <Link to='/power_usage_graph'>Power Usage Graph</Link> 
                     </li>
                     
                 </ul>
