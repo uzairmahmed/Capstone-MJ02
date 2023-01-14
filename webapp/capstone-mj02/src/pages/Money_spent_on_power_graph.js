@@ -1,4 +1,3 @@
-import { Navbar } from "../components/Navbar";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
@@ -28,7 +27,6 @@ const data = [
 function Moneyspentonpowergraph (){
     return(
         <div>
-            <Navbar />
 
             <div className="py-5">
                 <h1 className="text-4xl text-center">Money Spent On Power Graph</h1>

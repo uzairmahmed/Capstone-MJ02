@@ -15,11 +15,11 @@ export const Navbar = () => {
                 <ul className='hidden md:flex'>
 
                     <li className='px-3'> 
-                        <Link to='/'>Main Page</Link> 
+                        <Link to='/'>Home Iot Device Statistics</Link> 
                     </li>
 
                     <li className='px-3'> 
-                        <Link to='/money_spent_on_power_graph'>Money spent on power graph</Link> 
+                        <Link to='/network_statistics'>Network Statistics</Link> 
                     </li>
 
                     <li className='px-3'> 
