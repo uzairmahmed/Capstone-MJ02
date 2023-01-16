@@ -26,61 +26,37 @@ function Networkstatisticspage (){
                             </div>
                         </Link>
 
-                        <Link to='/'>
-                            <div className='rounded-xl shadow-xl border py-10'>
-                                <p className='font-bold text-indigo-500 text-4xl '>Device On Duration</p>
-                                <p className='mt-2 text-gray-400'>Time x time device is on</p>
-                            </div>
-                        </Link>
-
-                        <div className='grid gap-2 grid-cols-1 px-3 text-center md:grid-cols-2'>
-
-                            <Link to='/'>
+                            <div className='grid gap-2 grid-cols-1 px-3 text-center md:grid-cols-2'>
                                 <div className='rounded-xl shadow-xl border py-10'>
                                     <p className='font-bold text-indigo-500 text-2xl '>Network Security</p>
                                     <p className='mt-2 text-gray-400'></p>
                                 </div>
-                            </Link>
-
-                            <Link to='/'>
+                           
                                 <div className='rounded-xl shadow-xl border py-10'>
                                     <p className='font-bold text-indigo-500 text-2xl '>Fire Wall Status</p>
                                     <p className='mt-2 text-gray-400'></p>
                                 </div>
-                            </Link>
-
-                            <Link to='/'>
+                           
                                 <div className='rounded-xl shadow-xl border py-10'>
                                     <p className='font-bold text-indigo-500 text-2xl '>Signal Strength</p>
                                     <p className='mt-2 text-gray-400'></p>
                                 </div>
-                            </Link>
-
-                            <Link to='/'>
+                          
                                 <div className='rounded-xl shadow-xl border py-10'>
                                     <p className='font-bold text-indigo-500 text-2xl '>Connection to Internet</p>
                                     <p className='mt-2 text-gray-400'></p>
                                 </div>
-                            </Link>
-
-                            <Link to='/'>
+                            
                                 <div className='rounded-xl shadow-xl border py-10'>
                                     <p className='font-bold text-indigo-500 text-2xl '>Network Health</p>
                                     <p className='mt-2 text-gray-400'></p>
                                 </div>
-                            </Link>
-
-                            <Link to='/'>
+                       
                                 <div className='rounded-xl shadow-xl border py-10'>
                                     <p className='font-bold text-indigo-500 text-2xl '>Connected Devices</p>
                                     <p className='mt-2 text-gray-400'></p>
                                 </div>
-                            </Link>
-
-                        </div>
-
-                        
-                        
+                        </div>     
                 </div>
             </div>
         </div>

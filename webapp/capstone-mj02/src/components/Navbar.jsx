@@ -21,10 +21,6 @@ export const Navbar = () => {
                     <li className='px-3'> 
                         <Link to='/network_statistics'>Network Statistics</Link> 
                     </li>
-
-                    <li className='px-3'> 
-                        <Link to='/power_usage_graph'>Power Usage Graph</Link> 
-                    </li>
                     
                 </ul>
             </div>
