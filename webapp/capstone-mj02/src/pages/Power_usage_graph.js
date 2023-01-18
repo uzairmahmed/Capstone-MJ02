@@ -1,4 +1,8 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {db} from "../components/firebaseConfig/firebase";
+import {useState, useEffect} from "react";
+import { getDatabase, ref, onValue, set} from "firebase/database";
+
 
 
 const data = [
@@ -25,8 +29,32 @@ const data = [
   ];
   
 function Powerusagegraph (){
+
+
+    const [iotData, setIotData] = useState("");
+    const [iotDatas, setIotDatas] = useState([]);
+    //read
+    useEffect(() =>{
+      onValue(ref(db, 'LED-Strip/'), snapshot => {
+        const data=snapshot.val();
+        if(data !== null){
+          Object.values(data).map((iot) => {
+            setIotDatas(oldArray => [...oldArray, iot]);
+          });
+        }
+      });
+    }, []);
+
     return(
         <div>
+          <div className='text-bold text-center'>
+            {iotDatas.map(iot => (
+              <>
+              <h1>{iot.current}</h1>
+              <h1> </h1>
+              </>
+            ))}
+          </div>
 
             <div className="py-5">
                 <h1 className="text-4xl text-center">Power Usage Graph</h1>
