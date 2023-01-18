@@ -29,32 +29,43 @@ const data = [
   ];
   
 function Powerusagegraph (){
-
+    
 
     const [iotData, setIotData] = useState("");
     const [iotDatas, setIotDatas] = useState([]);
+    var points = [];
     //read
     useEffect(() =>{
       onValue(ref(db, 'LED-Strip/'), snapshot => {
         const data=snapshot.val();
+        var current = snapshot.child("current").key;
         if(data !== null){
+          //points.push(current);
+          console.log(current);
           Object.values(data).map((iot) => {
             setIotDatas(oldArray => [...oldArray, iot]);
+            points.push({iot});
+            console.log(points);
+            //console.log("Current " + points[0].iot.current);
           });
         }
       });
     }, []);
 
     return(
+      
         <div>
+          <div>{console.log("POINTS:" + points)}</div>
+          
           <div className='text-bold text-center'>
             {iotDatas.map(iot => (
               <>
-              <h1>{iot.current}</h1>
-              <h1> </h1>
+                <h1 className='text-bold text-blue-600'>Current: {iot.current}</h1>
               </>
             ))}
           </div>
+          <h2 className='text-bold text-red-600'>{points}</h2>
+        
 
             <div className="py-5">
                 <h1 className="text-4xl text-center">Power Usage Graph</h1>
@@ -71,7 +82,7 @@ function Powerusagegraph (){
                     }}
                     >
                     <CartesianGrid strokeDasharray="1 " horizontal="true" vertical = ""/>
-                    <XAxis dataKey="week" label={{ value: 'Time (hours)', position: 'insideBottom' }}/>
+                    <XAxis dataKey="month" label={{ value: 'Time (hours)', position: 'insideBottom' }}/>
                     <YAxis label={{ value: 'Power Usage (Watts)', angle: -90, position: 'insideLeft' }}/>
                     <Tooltip />
                     <Legend />
