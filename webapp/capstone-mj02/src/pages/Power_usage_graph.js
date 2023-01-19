@@ -27,7 +27,7 @@ const data = [
       
     },
   ];
-  var points = [];
+
   
 function Powerusagegraph (){
     const [iotData, setIotData] = useState("");
@@ -51,8 +51,10 @@ function Powerusagegraph (){
           }); */
           const values = Object.values(data);
           console.log(values);
-          points.push(values);
+          //points.push(values);
           setIotDatas(values);
+          const points = iotDatas.map(({current}) => current);
+          console.log(points);
         }
         
       });
@@ -60,7 +62,9 @@ function Powerusagegraph (){
 
     return(
         <div>
-          <div>{console.log({iotDatas})}</div>
+          <div>{iotDatas[4].current}</div>
+          <div>{JSON.stringify(iotDatas[0].current)}</div>
+          <div>{JSON.stringify(iotDatas)}</div>
           
          {/*  <div className='text-bold text-center'>
             {iotDatas.map(iot => (
@@ -75,7 +79,7 @@ function Powerusagegraph (){
                     <LineChart
                     width={500}
                     height={300}
-                    data={data}
+                    data={iotData}
                     margin={{
                         top: 5,
                         right: 30,
