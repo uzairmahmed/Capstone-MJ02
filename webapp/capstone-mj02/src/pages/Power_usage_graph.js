@@ -27,13 +27,12 @@ const data = [
       
     },
   ];
+  var points = [];
   
 function Powerusagegraph (){
-    
-
     const [iotData, setIotData] = useState("");
     const [iotDatas, setIotDatas] = useState([]);
-    var points = [];
+    
     //read
     useEffect(() =>{
       onValue(ref(db, 'LED-Strip/'), snapshot => {
@@ -41,32 +40,35 @@ function Powerusagegraph (){
         var current = snapshot.child("current").key;
         if(data !== null){
           //points.push(current);
-          console.log(current);
-          Object.values(data).map((iot) => {
+          //console.log(current);
+          /* Object.values(data).map((iot) => {
             setIotDatas(oldArray => [...oldArray, iot]);
-            points.push({iot});
-            console.log(points);
+            //points.push({iot});
+            const values = Object.values(data);
+            console.log(values);
+            //console.log(points);
             //console.log("Current " + points[0].iot.current);
-          });
+          }); */
+          const values = Object.values(data);
+          console.log(values);
+          points.push(values);
+          setIotDatas(values);
         }
+        
       });
     }, []);
 
     return(
-      
         <div>
-          <div>{console.log("POINTS:" + points)}</div>
+          <div>{console.log({iotDatas})}</div>
           
-          <div className='text-bold text-center'>
+         {/*  <div className='text-bold text-center'>
             {iotDatas.map(iot => (
               <>
                 <h1 className='text-bold text-blue-600'>Current: {iot.current}</h1>
               </>
             ))}
-          </div>
-          <h2 className='text-bold text-red-600'>{points}</h2>
-        
-
+          </div> */}
             <div className="py-5">
                 <h1 className="text-4xl text-center">Power Usage Graph</h1>
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
