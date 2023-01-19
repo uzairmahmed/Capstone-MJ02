@@ -9,12 +9,10 @@ const data = [
     {
       week: 'January 7-14',
       watts: 4,
-      
     },
     {
       week: 'Febuary 14-28',
       watts: 5,
-      
     },
     {
       week: 'March 1-8',
@@ -62,9 +60,9 @@ function Powerusagegraph (){
 
     return(
         <div>
-          <div>{iotDatas[4].current}</div>
+          {/* <div>{iotDatas[4].current}</div>
           <div>{JSON.stringify(iotDatas[0].current)}</div>
-          <div>{JSON.stringify(iotDatas)}</div>
+          <div>{JSON.stringify(iotDatas)}</div> */}
           
          {/*  <div className='text-bold text-center'>
             {iotDatas.map(iot => (
@@ -79,7 +77,7 @@ function Powerusagegraph (){
                     <LineChart
                     width={500}
                     height={300}
-                    data={iotData}
+                    data={iotDatas}
                     margin={{
                         top: 5,
                         right: 30,
@@ -88,11 +86,11 @@ function Powerusagegraph (){
                     }}
                     >
                     <CartesianGrid strokeDasharray="1 " horizontal="true" vertical = ""/>
-                    <XAxis dataKey="month" label={{ value: 'Time (hours)', position: 'insideBottom' }}/>
+                    <XAxis dataKey="current time" label={{ value: 'Time (hours)', position: 'insideBottom' }}/>
                     <YAxis label={{ value: 'Power Usage (Watts)', angle: -90, position: 'insideLeft' }}/>
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="watts" stroke="#8884d8" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="current"  stroke="#8884d8" activeDot={{ r: 8 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
