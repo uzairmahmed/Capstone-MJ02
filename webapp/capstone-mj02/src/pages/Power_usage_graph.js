@@ -37,19 +37,8 @@ function Powerusagegraph (){
         const data=snapshot.val();
         var current = snapshot.child("current").key;
         if(data !== null){
-          //points.push(current);
-          //console.log(current);
-          /* Object.values(data).map((iot) => {
-            setIotDatas(oldArray => [...oldArray, iot]);
-            //points.push({iot});
-            const values = Object.values(data);
-            console.log(values);
-            //console.log(points);
-            //console.log("Current " + points[0].iot.current);
-          }); */
           const values = Object.values(data);
           console.log(values);
-          //points.push(values);
           setIotDatas(values);
           const points = iotDatas.map(({current}) => current);
           console.log(points);
@@ -60,17 +49,6 @@ function Powerusagegraph (){
 
     return(
         <div>
-          {/* <div>{iotDatas[4].current}</div>
-          <div>{JSON.stringify(iotDatas[0].current)}</div>
-          <div>{JSON.stringify(iotDatas)}</div> */}
-          
-         {/*  <div className='text-bold text-center'>
-            {iotDatas.map(iot => (
-              <>
-                <h1 className='text-bold text-blue-600'>Current: {iot.current}</h1>
-              </>
-            ))}
-          </div> */}
             <div className="py-5">
                 <h1 className="text-4xl text-center">Power Usage Graph</h1>
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>

@@ -25,11 +25,6 @@ export const Navbar = () => {
                 </ul>
             </div>
 
-            <div className='hidden md:flex pr-4'>
-                <button className='border-none bg-transparent text-indigo-600 mr-4'>Sign In</button>
-                <button className='px-8 py-3'>Sign Up</button>
-            </div>
-
             <div className='md:hidden' onClick={handleClick}>
                 {!nav ? <Bars3Icon className='w-5'/> : <XMarkIcon className='w-5' />}
             </div>
@@ -41,10 +36,6 @@ export const Navbar = () => {
             <li className='border-b-2 border-zinc-300 w-full'>Support</li>
             <li className='border-b-2 border-zinc-300 w-full'>Platforms</li>
             <li className='border-b-2 border-zinc-300 w-full'>Pricing</li>
-            <div className='flex flex-col my-4'>
-                <button className='bg-transparent text-indigo-600 px-8 py-3 mb-4'>Sign In</button>
-                <button className='px-8 py-3'>Sign Up</button>
-            </div>
         </ul>
 
         
