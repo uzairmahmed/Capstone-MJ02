@@ -18,19 +18,23 @@ https://pimylifeup.com/raspberry-pi-mosquitto-mqtt-server/
 6. `nmcli --ask dev wifi connect <SSID>` and enter password
 7. `sudo apt update`
 8. `sudo apt upgrade`
+9. `sudo apt install python3`
 
 ## Install and Test MQTT Implementation
 9.  `sudo apt install mosquitto mosquitto-clients`
 10. `sudo systemctl status mosquitto`
-11. `screen`
-12. setup subscriber with `mosquitto_sub -h localhost -t "mqtt/hw"`
-13. Ctrl A, c
-14. `mosquitto_pub -h localhost -t "mqtt/hw" -m "hehllo"`
-15. Ctrl A, 0
-16. If "hehllo" shows up in terminal, your MQTT implementation works!
+11. `nano /etc/mosquitto/conf.d/mosquitto.conf`
+    1.  `allow_anonymous true`
+    2.  `listener 1883 0.0.0.0`
+12. `sudo service mosquitto restart`
+13. `screen`
+14. setup subscriber with `mosquitto_sub -h localhost -t "mqtt/hw"`
+15. Ctrl A, c
+16. `mosquitto_pub -h localhost -t "mqtt/hw" -m "hehllo"`
+17. Ctrl A, 0
+18. If "hehllo" shows up in terminal, your MQTT implementation works!
 
 from here, setup mosquitto client on multiple Pi devices, all with their own tags for MQTT communication.
 
 next steps:
     - create arch for different mqtt tags, with a service for every subscriber tag
-    - get zabbix working on client and server

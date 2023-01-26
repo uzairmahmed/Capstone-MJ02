@@ -59,12 +59,31 @@
 ## Configuration Backup
 1.  go to `System > Flash > Backup > Generate Archive` and save it to downloads.
 
+## iOS Tethering Setup
+1. Go to `System > Software`
+2. Click `Update lists...`
+3. Using Filter, install the following:
+   1. `kmod-usb-net-rndis`
+   2. `kmod-usb-net-ipheth`
+   3. `usbmuxd`
+   4. `usbutils`
+4. In an ssh terminal, enter the following:
+   1. `usbmuxd -v`
+   2. `sed -i -e "\$i usbmuxd" /etc/rc.local`
+5. `eth2` should now be visible under Devices
+6. Click `Network > Interfaces > Devices > Add device configuration...` and set the following:
+   1. Device type: `Bridge device`
+   2. Device name: `br-wan`
+   3. Bridge ports: `eth1` and `eth2`
+7. Go to `Interfaces > WAN > Edit` and change device to `br-wan`
+8. Unlock your iPhone, and after the notification appears, click `Trust this Computer` to start the tether.
+9. A green bubble will appear in the top right of your phone screen.
 ---
 ---
 ## To Do
 - Setup VPN with OpenVPN and ExpressVPN
-- Setup iPhone Ethernet Tethering for WAN
-- Setup Ryerson WiFi Security Certs
+- ~~Setup iPhone Ethernet Tethering for WAN~~
+- ~~Setup Ryerson WiFi Security Certs~~ *not possible*
 - Setup Network Logging
 - Setup MQTT Client Functionality
 ---
