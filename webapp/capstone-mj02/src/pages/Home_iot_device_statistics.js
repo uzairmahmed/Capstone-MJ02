@@ -27,7 +27,7 @@ function Homeiotdevicestats (){
                             </div>
                         </Link>
 
-                        <Link to='/'>
+                        <Link to='/device_on_duration_graph'>
                             <div className='rounded-xl shadow-xl border py-10'>
                                 <p className='font-bold text-indigo-500 text-4xl '>Device On Duration</p>
                                 <p className='mt-2 text-gray-400'>Time x time device is on</p>
