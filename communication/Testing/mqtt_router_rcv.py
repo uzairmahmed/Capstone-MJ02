@@ -26,20 +26,21 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
     print(device, mode, message)
 
     #Get time data is received 
-    now = datetime.now()
+    now = datetime.datetime.now()
     month = now.strftime('%B')
     day =  now.strftime('%d')
     current_time =  now.strftime('%B:%d:%H:%M:%S')
 
-    data={
+    pathString = now.isoformat().replace('.',':')
+
+    
+    #Send data to firebase
+    db.reference('/' + device + '/' + mode + '/' + pathString).set({
         'month' : month,
         'day': day,
         'current time': current_time,
         'stats': message
-    }
-    
-    #Send data to firebase
-    db.reference('/' + msg.topic).push(data)
+    })
 
 
 client = mqtt.Client("broker")  # Create instance of client with client ID “digi_mqtt_test”

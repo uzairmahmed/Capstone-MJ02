@@ -3,10 +3,10 @@
 // WiFi
 // const char *ssid = "NW Coextro WIFI"; // Enter your WiFi name
 // const char *password = "wycik96now";  // Enter WiFi password
-const char *ssid = "iPhone"; // Enter your WiFi name
-const char *password = "12345678";  // Enter WiFi password
+const char *ssid = "Uzair's iPhone"; // Enter your WiFi name
+const char *password = "qwertyuiop";  // Enter WiFi password
 // MQTT Broker
-const char *mqtt_broker = "172.20.10.4"; // Enter your WiFi or Ethernet IP
+const char *mqtt_broker = "172.20.10.10"; // Enter your WiFi or Ethernet IP
 const char *topic = "iOT_1/logs";
 const char *topic2 = "iOT_1/control";
 const int mqtt_port = 1883;
@@ -66,6 +66,14 @@ void loop() {
   //Add sesnor reading here
  client.loop();
  //Replace the string here for sending the data
- client.publish(topic, "{PowerStatus: Power: Voltage: Current: }");
- delay (2000);
+ int dummyPowerValue = 1;
+ float dummyVoltageValue = 5.0f;
+ float dummyCurrentValue = 2.5f;
+
+ char buffer[1024];
+ snprintf(buffer, sizeof(buffer), "{'Power': '%d', 'Voltage': %f, 'Current':%f}", dummyPowerValue, (char)dummyVoltageValue, (char)dummyCurrentValue);
+
+
+ client.publish(topic, buffer);
+ delay (10*100);
 }
