@@ -22,6 +22,9 @@ export const Navbar = () => {
                         <Link to='/network_statistics'>Network Statistics</Link> 
                     </li>
                     
+                    <li className='px-3'> 
+                        <Link to='/controls'>Controls</Link> 
+                    </li>
                 </ul>
             </div>
 
@@ -31,11 +34,9 @@ export const Navbar = () => {
         </div>
 
         <ul className={!nav ? 'hidden' : 'absolute bg-zinc-200 w-full px-8'}>
-            <li className='border-b-2 border-zinc-300 w-full'>Home</li>
-            <li className='border-b-2 border-zinc-300 w-full'>About</li>
-            <li className='border-b-2 border-zinc-300 w-full'>Support</li>
-            <li className='border-b-2 border-zinc-300 w-full'>Platforms</li>
-            <li className='border-b-2 border-zinc-300 w-full'>Pricing</li>
+            <li className='border-b-2 border-zinc-300 w-full'><Link to='/'>Home Iot Device Statistics</Link></li>
+            <li className='border-b-2 border-zinc-300 w-full'><Link to='/network_statistics'>Network Statistics</Link> </li>
+            <li className='border-b-2 border-zinc-300 w-full'><Link to='/controls'>Controls</Link></li>
         </ul>
 
         
