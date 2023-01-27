@@ -1,4 +1,14 @@
 import paho.mqtt.client as mqtt
+import firebase_admin
+from firebase_admin import db
+from firebase_admin import credentials
+import datetime 
+
+cred = credentials.Certificate('key.json')
+firebase_admin.initialize_app(cred,{
+    'databaseURL': 'https://home-iot-network-default-rtdb.firebaseio.com/'
+})
+
 
 def on_connect(client, userdata, flags, rc):  # The callback for when 
     print("Connected with result code {0}".format(str(rc)))  
@@ -14,6 +24,22 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
     message = msg.payload.decode('ascii')
 
     print(device, mode, message)
+
+    #Get time data is received 
+    now = datetime.now()
+    month = now.strftime('%B')
+    day =  now.strftime('%d')
+    current_time =  now.strftime('%B:%d:%H:%M:%S')
+
+    data={
+        'month' : month,
+        'day': day,
+        'current time': current_time,
+        'stats': message
+    }
+    
+    #Send data to firebase
+    db.reference('/' + msg.topic).push(data)
 
 
 client = mqtt.Client("broker")  # Create instance of client with client ID “digi_mqtt_test”
