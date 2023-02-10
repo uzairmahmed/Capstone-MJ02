@@ -1,11 +1,12 @@
 # Wireless Network Setup
 - Raspberry Pi 3B+
 - TP-Link UE306 - USB 3.0 to RJ45 Gigabit Ethernet Dongle (`asix-ax88179`)
+- SSH via `root@192.168.1.1`, password is `mj02`
 
 ## Setup: 
 - Raspberry Pi Running OpenWRT as Router
 - Wired WAN Interface over USB Ethernet Dongle
-- Wired WAN Interface over iPhone connected via USB **planned*
+- Wired WAN Interface over iPhone connected via USB
 - Wired LAN Interface over Built-in Ethernet
 - Wireless LAN Interface over Wireless Radio
 - Ryerson Wireless Configuration Certificates
@@ -78,14 +79,21 @@
 7. Go to `Interfaces > WAN > Edit` and change device to `br-wan`
 8. Unlock your iPhone, and after the notification appears, click `Trust this Computer` to start the tether.
 9. A green bubble will appear in the top right of your phone screen.
+
+## Logging Setup
+1. Open an SSH terminal (`root@192.168.1.1`, password is `mj02`)
+2. Install Python with `opkg install python3-pip`
+3. Install paho with `pip install paho-mqtt`
+
 ---
 ---
+
 ## To Do
 - Setup VPN with OpenVPN and ExpressVPN
 - ~~Setup iPhone Ethernet Tethering for WAN~~
 - ~~Setup Ryerson WiFi Security Certs~~ *not possible*
 - Setup Network Logging
-- Setup MQTT Client Functionality
+- ~~Setup MQTT Client Functionality~~
 ---
 ## Sources
 - https://openwrt.org/docs/guide-quick-start/basic_wifi
