@@ -2,30 +2,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import {db} from "../components/firebaseConfig/firebase";
 import {useState, useEffect} from "react";
 import { getDatabase, ref, onValue, set} from "firebase/database";
-
-
-
-const data = [
-    {
-      week: 'January 7-14',
-      watts: 4,
-    },
-    {
-      week: 'Febuary 14-28',
-      watts: 5,
-    },
-    {
-      week: 'March 1-8',
-      watts: 7,
-      
-    },
-    {
-      week: 'April 7-14',
-      watts: 4.5,
-      
-    },
-  ];
-
   
 function Powerusagegraph (){
     const [iotData, setIotData] = useState("");
@@ -33,7 +9,7 @@ function Powerusagegraph (){
     
     //read
     useEffect(() =>{
-      onValue(ref(db, 'LED-Strip/'), snapshot => {
+      onValue(ref(db, 'iOT_1'+'/logs'), snapshot => {
         const data=snapshot.val();
         var current = snapshot.child("current").key;
         if(data !== null){
