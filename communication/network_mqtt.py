@@ -37,4 +37,5 @@ def send_values_over_mqtt(connected_devices):
 
 if __name__ == '__main__':
     listed = list_connected_clients()
-    parse_connected_clients(listed)
+    connected_devices = parse_connected_clients(listed)
+    send_values_over_mqtt(connected_devices)

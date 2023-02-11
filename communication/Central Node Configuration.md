@@ -49,4 +49,26 @@
       listener 1883 0.0.0.0
       ```
    3. `sudo service mosquitto restart`
-4. 
+
+## React App Setup
+1. Install NodeJS with the following commands
+   ```
+   sudo su -
+   curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+   sudo apt install nodejs
+   exit
+   ```
+2. Make a new directory called `webapp` and cd into it.
+3. Clone the Capstone-MJ02 repository with `git clone https://github.com/uzairmahmed/Capstone-MJ02` and login
+4. cd into `Capstone-MJ02/webapp/capstone-mj02`
+5. Install NPM packages with `npm install`
+6. Start the webapp with `npm start`
+
+## Communication Setup
+1. Make a new directory called `communication` 
+2. Copy the GitHub repository's communication folder to the local folder with `cp -r  webapp/Capstone-MJ02/communication/ .`
+3. cd into `communication`
+4. install rust `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+5. `source "$HOME/.cargo/env"`
+6. `python3 -m pip install --upgrade pip`
+7. install python dependencies with `pip3 install paho-mqtt firebase_admin`
