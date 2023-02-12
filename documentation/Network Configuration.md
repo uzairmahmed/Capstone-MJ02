@@ -86,10 +86,7 @@
 2. Install dependencies with `opkg install git-http python3-pip`
 3. Install paho with `pip install -r paho-mqtt`
 4. Git clone https://github.com/uzairmahmed/Capstone-MJ02
-5. Copy `communication/services/firebase_collector.service` into `/etc/systemd/system` with `sudo cp Capstone-MJ02/communication/services/firebase_collector.service /etc/systemd/system`
-6. `sudo systemctl daemon-reload`
-7. `sudo systemctl enable firebase_collector.service`
-8. `sudo systemctl start firebase_collector.service`
+5. `python Capstone-MJ02/communication/network_mqtt.py`
 
 ---
 ---

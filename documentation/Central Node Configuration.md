@@ -78,8 +78,8 @@
 
 ## Communication Setup
 3. Install python dependencies with `pip3 install -r requirements.txt`
-4. cd into `Capstone-MJ02/communication`
-5. install rust `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-6. `source "$HOME/.cargo/env"`
-7. `python3 -m pip install --upgrade pip`
-8. install python dependencies with `pip3 install paho-mqtt firebase_admin`
+4. cd into `Capstone-MJ02/`
+5. Copy `communication/services/firebase_collector.service` into `/etc/systemd/system` with `sudo cp Capstone-MJ02/communication/services/firebase_collector.service /etc/systemd/system`
+6. `sudo systemctl daemon-reload`
+7. `sudo systemctl enable firebase_collector.service`
+8. `sudo systemctl start firebase_collector.service`
