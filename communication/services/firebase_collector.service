@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 Restart=always
-ExecStart=/usr/bin/python3 /root/Capstone-MJ02/communication/central_mqtt.py
+ExecStart=/usr/bin/python3 /home/pi/Capstone-MJ02/communication/central_mqtt.py
 StandardOutput=journal
 StandardError=journal
 
