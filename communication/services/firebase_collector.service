@@ -7,6 +7,8 @@ Wants=network-online.target
 Type=simple
 Restart=always
 ExecStart=/usr/bin/python3 /root/Capstone-MJ02/communication/central_mqtt.py
+StandardOutput=/var/firebase_collector_out.log
+StandardError=/var/firebase_collector_err.log
 
 [Install]
 WantedBy=multi-user.target
