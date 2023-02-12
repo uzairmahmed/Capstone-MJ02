@@ -71,14 +71,15 @@
 4. In an ssh terminal, enter the following:
    1. `usbmuxd -v`
    2. `sed -i -e "\$i usbmuxd" /etc/rc.local`
-5. `eth2` should now be visible under Devices
-6. Click `Network > Interfaces > Devices > Add device configuration...` and set the following:
+5. Plug an iPhone into the Pi over USB
+6. `eth2` should now be visible under Devices
+7. Click `Network > Interfaces > Devices > Add device configuration...` and set the following:
    1. Device type: `Bridge device`
    2. Device name: `br-wan`
    3. Bridge ports: `eth1` and `eth2`
-7. Go to `Interfaces > WAN > Edit` and change device to `br-wan`
-8. Unlock your iPhone, and after the notification appears, click `Trust this Computer` to start the tether.
-9. A green bubble will appear in the top right of your phone screen.
+8. Go to `Interfaces > WAN > Edit` and change device to `br-wan`
+9. Unlock your iPhone, and after the notification appears, click `Trust this Computer` to start the tether.
+10. A green bubble will appear in the top right of your phone screen.
 
 ## Logging Setup
 1. Open an SSH terminal (`root@192.168.1.1`, password is `mj02`)
