@@ -18,7 +18,7 @@ else:
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": os.environ.get("GCP_AUTH_PROVIDER_X509_CERT_URL"),
-        "client_x509_cert_url": os.environ.get("GCP_AUTH_PROVIDER_X509_CERT_URL")
+        "client_x509_cert_url": os.environ.get("GCP_CLIENT_X509_CERT_URL")
     }
 cred = credentials.Certificate(creds)
 
