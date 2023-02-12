@@ -77,10 +77,9 @@
 6. Start the webapp with `npm start`
 
 ## Communication Setup
-1. Make a new directory called `communication` 
-2. Copy the GitHub repository's communication folder to the local folder with `cp -r  webapp/Capstone-MJ02/communication/ .`
-3. cd into `communication`
-4. install rust `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-5. `source "$HOME/.cargo/env"`
-6. `python3 -m pip install --upgrade pip`
-7. install python dependencies with `pip3 install paho-mqtt firebase_admin`
+3. Install python dependencies with `pip3 install -r requirements.txt`
+4. cd into `Capstone-MJ02/communication`
+5. install rust `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+6. `source "$HOME/.cargo/env"`
+7. `python3 -m pip install --upgrade pip`
+8. install python dependencies with `pip3 install paho-mqtt firebase_admin`
