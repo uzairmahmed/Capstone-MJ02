@@ -1,10 +1,28 @@
 import paho.mqtt.client as mqtt
-import firebase_admin, json
+import firebase_admin, json, os
 from firebase_admin import db
 from firebase_admin import credentials
 import datetime 
 
-cred = credentials.Certificate('key.json')
+if os.environ.get("GCP_CREDENTIAL") == None:
+    creds = "key.json"
+else:
+    os.environ.get("GCP_CREDENTIAL")
+    creds = {
+        "type": "service_account",
+        "project_id": "home-iot-network",
+        "private_key_id": os.environ.get("GCP_PRIVATE_KEY_ID"),
+        "private_key": os.environ.get("GCP_PRIVATE_KEY"),
+        "client_email": os.environ.get("GCP_CLIENT_EMAIL"),
+        "client_id": os.environ.get("GCP_CLIENT_ID"),
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": os.environ.get("GCP_AUTH_PROVIDER_X509_CERT_URL"),
+        "client_x509_cert_url": os.environ.get("GCP_AUTH_PROVIDER_X509_CERT_URL")
+    }
+cred = credentials.Certificate(creds)
+
+
 firebase_admin.initialize_app(cred,{
     'databaseURL': 'https://home-iot-network-default-rtdb.firebaseio.com/'
 })
