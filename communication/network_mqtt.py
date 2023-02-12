@@ -32,7 +32,7 @@ def parse_connected_clients(listed):
 
 def send_values_over_mqtt(connected_devices):
     mqttc = mqtt.Client("router_node")
-    mqttc.connect("192.168.1.184", 1883)  # Connect to (broker, port, keepalive-time)
+    mqttc.connect("192.168.1.143", 1883)  # Connect to (broker, port, keepalive-time)
     mqttc.publish("router/logs", json.dumps(connected_devices))
 
 if __name__ == '__main__':
