@@ -4,23 +4,13 @@ from firebase_admin import db
 from firebase_admin import credentials
 import datetime 
 
-if os.environ.get("GCP_CREDENTIAL") == None:
+env_vars = os.environ.get("GCP_CREDENTIAL")
+if env_vars == None:
     creds = "key.json"
 else:
-    os.environ.get("GCP_CREDENTIAL")
-    creds = {
-        "type": "service_account",
-        "project_id": "home-iot-network",
-        "private_key_id": os.environ.get("GCP_PRIVATE_KEY_ID"),
-        "private_key": os.environ.get("GCP_PRIVATE_KEY"),
-        "client_email": os.environ.get("GCP_CLIENT_EMAIL"),
-        "client_id": os.environ.get("GCP_CLIENT_ID"),
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": os.environ.get("GCP_AUTH_PROVIDER_X509_CERT_URL"),
-        "client_x509_cert_url": os.environ.get("GCP_CLIENT_X509_CERT_URL")
-    }
+    creds = json.loads(env_vars)
 cred = credentials.Certificate(creds)
+
 
 
 firebase_admin.initialize_app(cred,{
