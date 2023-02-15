@@ -86,10 +86,13 @@
 2. Install dependencies with `opkg install git-http python3-pip`
 3. Install paho with `pip install -r paho-mqtt`
 4. Git clone https://github.com/uzairmahmed/Capstone-MJ02
-5. `python Capstone-MJ02/communication/network_mqtt.py`
+5. Using crontab, schedule the mqtt file to be run every minute.
+   1. To do this, enable crontab service with `/etc/init.d/cron enable`
+   2. `crontab -e`, then type `i`
+   3. Add this line `*/5 * * * * /usr/bin/python /root/Capstone-MJ02/communication/network_mqtt.py`
+   4. click `esc` and then type `:wq` and enter
+   5. `/etc/init.d/cron start`
 
----
----
 
 ## To Do
 - Setup VPN with OpenVPN and ExpressVPN
