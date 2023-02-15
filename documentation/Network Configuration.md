@@ -49,8 +49,9 @@
 
 ## Security
 1. Go to `Network > Wireless > Edit > Interface Configuration` and set the following:
-   1. ESSID: `Capstone`
-   2. Wireless Security
+   1. Set protocol to N and set to 2.4GHz
+   2. ESSID: `Capstone`
+   3. Wireless Security
       1. Encryption: `WPA2-PSK`
       2. Key: `capstoneMJ02`
 2. Click `Save`, and then `Save and Apply`   
@@ -83,7 +84,7 @@
 
 ## Logging Setup
 1. Open an SSH terminal (`root@192.168.1.1`, password is `mj02`)
-2. Install dependencies with `opkg install git-http python3-pip`
+2. Install dependencies with `opkg install git-http python3-pip htop`
 3. Install paho with `pip install -r paho-mqtt`
 4. Git clone https://github.com/uzairmahmed/Capstone-MJ02
 5. `python Capstone-MJ02/communication/network_mqtt.py`
