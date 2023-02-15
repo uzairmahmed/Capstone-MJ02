@@ -1,0 +1,15 @@
+[Unit]
+Description=Service that collects MQTT transmissions and sends them to Firebase
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Restart=always
+ExecStart=/usr/bin/python3 /home/pi/Capstone-MJ02/communication/central_mqtt.py
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

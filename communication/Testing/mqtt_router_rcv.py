@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-import firebase_admin
+import firebase_admin, json
 from firebase_admin import db
 from firebase_admin import credentials
 import datetime 
@@ -21,9 +21,9 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
     split = msg.topic.split('/')
     device = split[0]
     mode = split[1]
-    message = msg.payload.decode('ascii')
+    message = msg.payload.decode('ascii').replace("'", '"').replace('/','SLASH')
 
-    print(device, mode, message)
+    # print(device, mode, message)
 
     #Get time data is received 
     now = datetime.datetime.now()
@@ -33,13 +33,13 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
 
     pathString = now.isoformat().replace('.',':')
 
-    
+    print(json.loads(message))
     #Send data to firebase
     db.reference('/' + device + '/' + mode + '/' + pathString).set({
         'month' : month,
         'day': day,
         'current time': current_time,
-        'stats': message
+        'stats':json.loads(message)
     })
 
 
