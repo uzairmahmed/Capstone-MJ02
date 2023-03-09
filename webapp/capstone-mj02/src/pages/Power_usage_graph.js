@@ -9,19 +9,36 @@ function Powerusagegraph (){
     
     //read
     useEffect(() =>{
-      onValue(ref(db, 'iOT_1'+'/logs'), snapshot => {
+      onValue(ref(db, 'iOT_1'+'/logs/'), snapshot => {
         const data=snapshot.val();
-        var current = snapshot.child("current").key;
+        var power = snapshot.child("power_mW").key;
+        //console.log(data);
+        //console.log(power);
         if(data !== null){
           const values = Object.values(data);
           console.log(values);
           setIotDatas(values);
-          const points = iotDatas.map(({current}) => current);
-          console.log(points);
+          const points = iotDatas.map(({power}) => power);
+          //console.log(points);
         }
         
       });
     }, []);
+
+    /*
+    const db = getDatabase();
+  const dataRef = ref(db, '/groups');
+  onValue(dataRef, (snapshot) => {
+  snapshot.forEach((groupSnapshot) => {
+    console.log(groupSnapshot.key); // "-N02...R1r", "-N02...1T8"
+    console.log(groupSnapshot.child("g_id").val()); // "jystl", "nijfx"
+
+    snapshot.child("members").forEach((memberSnapshot) => {
+      ... // each of the child snapshots of the `members` nodes
+    });
+  })
+})
+    */
 
     return(
         <div>
@@ -41,10 +58,10 @@ function Powerusagegraph (){
                     >
                     <CartesianGrid strokeDasharray="1 " horizontal="true" vertical = ""/>
                     <XAxis dataKey="current time" label={{ value: 'Time (hours)', position: 'insideBottom' }}/>
-                    <YAxis label={{ value: 'Power Usage (Watts)', angle: -90, position: 'insideLeft' }}/>
+                    <YAxis label={{ value: 'Power Usage (mWatts)', angle: -90, position: 'insideLeft' }}/>
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="current"  stroke="#8884d8" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="stats.power_mW"  stroke="#8884d8" activeDot={{ r: 8 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
