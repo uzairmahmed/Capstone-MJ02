@@ -59,9 +59,8 @@ function Controlspage (){
             <div className='max-width-[1240px] mx-auto '>
                 
                 <div className='text-center'>
-               
                     <h2 className='text-5xl font-bold'>Controls Page</h2>
-                    <p className='text-2xl py-10 text-gray-500'>Device: {!which_iot ? 'Iot Device 1: Power Bank' : 'Iot Device 2: Light Strip'}</p>
+                    <p className='text-2xl py-10 text-gray-500'>Device: {!which_iot ? 'Power Bank' : 'Light Strip'}</p>
                     <button className="bg-transparent hover:bg-indigo-500 text-indigo-500 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded" onClick={() =>{ setIot(!which_iot);}}>Iot Device 1/2</button> 
                 </div>
 

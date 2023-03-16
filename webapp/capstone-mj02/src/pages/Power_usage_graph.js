@@ -6,6 +6,9 @@ import { getDatabase, ref, onValue, set} from "firebase/database";
 function Powerusagegraph (){
     const [iotData, setIotData] = useState("");
     const [iotDatas, setIotDatas] = useState([]);
+    const [month_selection , setMonth] = useState();
+    const [type, setType] = useState();
+
     
     //read
     useEffect(() =>{
@@ -42,6 +45,33 @@ function Powerusagegraph (){
 
     return(
         <div>
+           <div>
+              <select value={type} onChange= {e =>setType(e.target.value)}>
+                <option value="Live" selected>Live</option>
+                <option value="7_Days">Past 7 days</option>
+                <option value="Month" >Month</option>
+              </select>
+            </div>
+
+            {type == "Month" && (<div>
+              <h1>{month_selection} </h1>
+              <select value={month_selection} onChange= {e =>setMonth(e.target.value)}>
+                <option value="Jan" selected>January</option>
+                <option value="Feb">Febuary</option>
+                <option value="Mar">March</option>
+                <option value="Apr">April</option>
+                <option value="May">May</option>
+                <option value="Jun">June</option>
+                <option value="Jul">July</option>
+                <option value="Aug">August</option>
+                <option value="Sep">September</option>
+                <option value="Oct">October</option>
+                <option value="Nov">November</option>
+                <option value="Dec">December</option>
+              </select>
+            </div>)}
+
+
             <div className="py-5">
                 <h1 className="text-4xl text-center">Power Usage Graph</h1>
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
