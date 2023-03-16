@@ -10,26 +10,40 @@ function Controlspage (){
     const [iotDatas, setIotDatas] = useState([]);
     const [on_off , setOn_off] = useState(false);
     const [sliderValueRed, setSliderValueRed] = useState(150);
-    //const [sliderValue, setSliderValue] = useState(0);
-    //const [sliderValue, setSliderValue] = useState(0);
+    const [sliderValueGreen, setSliderValueGreen] = useState(150);
+    const [sliderValueBlue, setSliderValueBlue] = useState(150);
     
     // Push Function
-    const Push = () => {
+    const PushColor = () => {
+        set(ref(db, 'iOT_1/control/color' ), {
+            red_value : sliderValueRed,
+            green_value : sliderValueGreen,
+            blue_value : sliderValueBlue
+          });
+    }
+
+    /*const Push = () => {
         set(ref(db, 'iOT_1/control' ), {
             on_off : on_off,
             red_value : sliderValueRed,  
           });
-    }
+    }*/
 
-    const PushRed = () => {
-        set(ref(db, 'iOT_1/control' ), {
-            on_off : on_off, 
-            red_value : sliderValueRed, 
+    const PushPower = () => {
+        set(ref(db, 'iOT_1/control/power' ), {
+            on_off : on_off
           });
     }
-    const handleChange = (event) => {
+    const handleChangeRed = (event) => {
         setSliderValueRed(event.target.value);
       }
+    const handleChangeGreen = (event) => {
+        setSliderValueGreen(event.target.value);
+    }
+
+    const handleChangeBlue = (event) => {
+        setSliderValueBlue(event.target.value);
+    }
     /*const updateSliderValue = (value) => {
   firebase.database().ref('sliderValue').set(value);
 }*/
@@ -48,7 +62,7 @@ function Controlspage (){
                     
                             <div className='rounded-xl shadow-xl border py-10'>
                                 <p className='font-bold text-indigo-500 text-4xl '>Power</p>
-                                <button className="bg-transparent hover:bg-indigo-500 text-indigo-500 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded" onClick={() =>{ setOn_off(!on_off); Push();}}>on/off</button>
+                                <button className="bg-transparent hover:bg-indigo-500 text-indigo-500 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded" onClick={() =>{ setOn_off(!on_off); PushPower();}}>on/off</button>
                                 <p className='mt-2 text-gray-400'>{!on_off ? 'The device is On!' : 'The device is Off!'}</p>
                             </div>
                         
@@ -66,19 +80,36 @@ function Controlspage (){
                                             min="0"
                                             max="255"
                                             value={sliderValueRed}
-                                            onChange={handleChange}
+                                            onChange={handleChangeRed}
                                         />
                                     <p>Value: {sliderValueRed}</p>
                                 </div>
 
-                                <button className="bg-transparent hover:bg-indigo-500 text-indigo-500 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded" onClick={() =>{PushRed();}}>set red value</button>
-                                
-                                <p className='mt-2 text-blue-400'>Blue</p>
-                                <Slider />
-                                <p className='mt-2 text-green-400'>Green</p>
-                                <Slider />
-                                
+                                <div>
+                                    <p className='mt-2 text-blue-400'>Blue</p>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="255"
+                                            //value={sliderValueGreen}
+                                            onChange={handleChangeBlue}
+                                        />
+                                    <p>Value: {sliderValueBlue}</p>
+                                </div>
 
+                                <div>
+                                    <p className='mt-2 text-green-400'>Green</p>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="255"
+                                            //value={sliderValueGreen}
+                                            onChange={handleChangeGreen}
+                                        />
+                                    <p>Value: {sliderValueGreen}</p>
+                                </div>
+
+                                <button className="bg-transparent hover:bg-indigo-500 text-indigo-500 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded" onClick={() =>{PushColor();}}>Set RGB value</button>
                             </div>
                 </div>
             </div>
