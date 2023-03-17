@@ -1,18 +1,40 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import {db} from "../components/firebaseConfig/firebase";
 import {useState, useEffect} from "react";
-import { getDatabase, ref, onValue, set} from "firebase/database";
+import { getDatabase, ref, onValue, set, orderByChild, startAt, endAt, query} from "firebase/database";
   
 function Powerusagegraph (){
     const [iotData, setIotData] = useState("");
     const [iotDatas, setIotDatas] = useState([]);
-    const [month_selection , setMonth] = useState();
+    const [ogiotDatas, setOgIotDatas] = useState([]);
+    const [month_selection , setMonth] = useState("January");
     const [type, setType] = useState();
-
-    
     //read
-    useEffect(() =>{
-      onValue(ref(db, 'iOT_1'+'/logs/'), snapshot => {
+    /* 
+    const queryRef = query(
+      ref(db, 'your-data-path'),
+      orderByChild('timestamp'), // Order the data by timestamp or another relevant child key
+      startAt(`2023-${month}-01T00:00:00`), // Specify the start of the month you want to retrieve
+      endAt(`2023-${month}-31T23:59:59`) // Specify the end of the month you want to retrieve
+    );
+    */
+    /*useEffect(() =>{
+      let queryRef; 
+      if (type === "Month") {
+        console.log(type);
+        iotDatas = [];
+        let startTimestamp = new Date(`2023-02-01T00:00:00`);
+        let endTimestamp = new Date(`2023-02-31T23:59:59`);
+        console.log(startTimestamp);
+        console.log(endTimestamp);
+        const db_ref = ref(db, 'iOT_1'+ '/logs/')
+        //queryRef = query(ref(db, 'iOT_1' + '/logs/'),orderByChild('logs'),startAt(`2023-02-01T00:00:00`),endAt(`2023-02-31T23:59:59`));
+        queryRef = orderByChild(db_ref, `month`).equalTo(`February`);
+      } else {
+        iotDatas = [];
+        queryRef = ref(db, 'iOT_1' + '/logs/');
+      }
+      onValue(queryRef, snapshot => {
         const data=snapshot.val();
         var power = snapshot.child("power_mW").key;
         //console.log(data);
@@ -24,50 +46,69 @@ function Powerusagegraph (){
           const points = iotDatas.map(({power}) => power);
           //console.log(points);
         }
-        
+      });
+    }, [type, month_selection]);*/
+    //read
+    useEffect(() =>{
+      onValue(ref(db, 'iOT_1'+'/logs/'), snapshot => {
+        const data=snapshot.val();
+        var power = snapshot.child("power_mW").key;
+        //console.log(data);
+        //console.log(power);
+        if(data !== null){
+          const values = Object.values(data);
+          //console.log(values);
+          setIotDatas(values);
+          setOgIotDatas(values);
+          const points = iotDatas.map(({power}) => power);
+          //console.log(points);
+        }
       });
     }, []);
 
-    /*
-    const db = getDatabase();
-  const dataRef = ref(db, '/groups');
-  onValue(dataRef, (snapshot) => {
-  snapshot.forEach((groupSnapshot) => {
-    console.log(groupSnapshot.key); // "-N02...R1r", "-N02...1T8"
-    console.log(groupSnapshot.child("g_id").val()); // "jystl", "nijfx"
-
-    snapshot.child("members").forEach((memberSnapshot) => {
-      ... // each of the child snapshots of the `members` nodes
-    });
-  })
-})
-    */
-
+    useEffect(() => {
+      console.log(type);
+      console.log(month_selection);
+      if (type === "Month") {
+        const filteredData = ogiotDatas.filter(
+          (ogiotDatas) => ogiotDatas.month === month_selection
+        );
+        setIotDatas(filteredData);
+        console.log(filteredData);
+      } else if(type === "Live") {
+        console.log(iotDatas);
+        setIotDatas(ogiotDatas);
+      } else if (type === "7_Days"){
+        console.log(iotDatas);
+        setIotDatas(ogiotDatas);
+      }
+    }, [type, month_selection]);
+  
     return(
         <div>
            <div>
-              <select value={type} onChange= {e =>setType(e.target.value)}>
-                <option value="Live" selected>Live</option>
+              <select defaultValue={type} onChange= {e =>setType(e.target.value)}>
+                <option value="Live">Live</option>
                 <option value="7_Days">Past 7 days</option>
                 <option value="Month" >Month</option>
               </select>
             </div>
 
-            {type == "Month" && (<div>
+            {type === "Month" && (<div>
               <h1>{month_selection} </h1>
-              <select value={month_selection} onChange= {e =>setMonth(e.target.value)}>
-                <option value="Jan" selected>January</option>
-                <option value="Feb">Febuary</option>
-                <option value="Mar">March</option>
-                <option value="Apr">April</option>
+              <select defaultValue={month_selection} onChange= {e =>setMonth(e.target.value)}>
+                <option value="January" defaultValue>January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
                 <option value="May">May</option>
-                <option value="Jun">June</option>
-                <option value="Jul">July</option>
-                <option value="Aug">August</option>
-                <option value="Sep">September</option>
-                <option value="Oct">October</option>
-                <option value="Nov">November</option>
-                <option value="Dec">December</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
               </select>
             </div>)}
 
