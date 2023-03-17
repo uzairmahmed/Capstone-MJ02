@@ -9,6 +9,20 @@ function Powerusagegraph (){
     const [ogiotDatas, setOgIotDatas] = useState([]);
     const [month_selection , setMonth] = useState("January");
     const [type, setType] = useState();
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
     //read
     /* 
     const queryRef = query(
@@ -67,8 +81,7 @@ function Powerusagegraph (){
     }, []);
 
     useEffect(() => {
-      console.log(type);
-      console.log(month_selection);
+      console.log(ogiotDatas.date);
       if (type === "Month") {
         const filteredData = ogiotDatas.filter(
           (ogiotDatas) => ogiotDatas.month === month_selection
@@ -79,8 +92,18 @@ function Powerusagegraph (){
         console.log(iotDatas);
         setIotDatas(ogiotDatas);
       } else if (type === "7_Days"){
-        console.log(iotDatas);
-        setIotDatas(ogiotDatas);
+        const now = new Date();
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const sevenDaysAgoMonth = sevenDaysAgo.getMonth(); // returns a number between 0 and 11 representing the month (0 = January, 1 = February, etc.)
+        const sevenDaysAgoDate = sevenDaysAgo.getDate(); // returns a number between 1 and 31 representing the day of the month
+        const currentMonthName = monthNames[sevenDaysAgoMonth];
+        
+        console.log(currentMonthName);
+        console.log(sevenDaysAgoDate);
+        const filteredData7days = ogiotDatas.filter(
+          (ogiotDatas) => (ogiotDatas.month === currentMonthName && ogiotDatas.day >= sevenDaysAgoDate)
+        );
+        setIotDatas(filteredData7days);
       }
     }, [type, month_selection]);
   
