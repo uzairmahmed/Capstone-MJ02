@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import {db} from "../components/firebaseConfig/firebase";
 import {useState, useEffect} from "react";
-import { getDatabase, ref, onValue, set} from "firebase/database";
+import { getDatabase, ref, onValue, set, update} from "firebase/database";
 import { Slider } from "../components/Slider.jsx";
 
 function Controlspage (){
@@ -21,10 +21,8 @@ function Controlspage (){
     
     // Push Function
     const PushColor = () => {
-        set(ref(db, iot_device + '/control/color'), {
-            red_value : sliderValueRed,
-            green_value : sliderValueGreen,
-            blue_value : sliderValueBlue
+        update(ref(db, iot_device + '/control'), {
+            color : [sliderValueRed, sliderValueGreen, sliderValueBlue].toString()
           });
     }
 
@@ -36,7 +34,7 @@ function Controlspage (){
     }*/
 
     const PushPower = () => {
-        set(ref(db, iot_device + '/control/power'), {
+        update(ref(db, iot_device + '/control'), {
             on_off : on_off
           });
     }
@@ -93,18 +91,6 @@ function Controlspage (){
                                 </div>
 
                                 <div>
-                                    <p className='mt-2 text-blue-400'>Blue</p>
-                                        <input
-                                            type="range"
-                                            min="0"
-                                            max="255"
-                                            //value={sliderValueGreen}
-                                            onChange={handleChangeBlue}
-                                        />
-                                    <p>Value: {sliderValueBlue}</p>
-                                </div>
-
-                                <div>
                                     <p className='mt-2 text-green-400'>Green</p>
                                         <input
                                             type="range"
@@ -114,6 +100,18 @@ function Controlspage (){
                                             onChange={handleChangeGreen}
                                         />
                                     <p>Value: {sliderValueGreen}</p>
+                                </div>
+
+                                <div>
+                                    <p className='mt-2 text-blue-400'>Blue</p>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="255"
+                                            //value={sliderValueGreen}
+                                            onChange={handleChangeBlue}
+                                        />
+                                    <p>Value: {sliderValueBlue}</p>
                                 </div>
 
                                 <button className="bg-transparent hover:bg-indigo-500 text-indigo-500 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded" onClick={() =>{PushColor();}}>Set RGB value</button>
