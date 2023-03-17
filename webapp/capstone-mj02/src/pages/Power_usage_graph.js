@@ -23,6 +23,7 @@ function Powerusagegraph (){
       "November",
       "December",
     ];
+
     //read
     /* 
     const queryRef = query(
@@ -72,7 +73,6 @@ function Powerusagegraph (){
         if(data !== null){
           const values = Object.values(data);
           //console.log(values);
-          setIotDatas(values);
           setOgIotDatas(values);
           const points = iotDatas.map(({power}) => power);
           //console.log(points);
