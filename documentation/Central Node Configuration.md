@@ -78,7 +78,6 @@
 7.  `sudo apt install xdotool unclutter`
 8.  `sudo raspi-config`
 9.  `System Options` > `Boot / Auto Login` > `Desktop Autologin — Desktop GUI`
-11. `sudo cp Capstone-MJ02/communication/services/kiosk.sh /home/pi`
 12. `sudo cp Capstone-MJ02/communication/services/kiosk.service /etc/systemd/system`
 13. `sudo cp Capstone-MJ02/communication/services/react_server.service /etc/systemd/system`
 14. `sudo systemctl daemon-reload`
