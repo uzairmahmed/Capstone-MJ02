@@ -84,8 +84,8 @@
 
 ## Logging Setup
 1. Open an SSH terminal (`root@192.168.1.1`, password is `mj02`)
-2. Install dependencies with `opkg install git-http python3-pip htop`
-3. Install paho with `pip install -r paho-mqtt`
+2. Install dependencies with `opkg install git-http python3-pip htop python3-psutil`
+3. Install paho with `pip install -r paho-mqtt psutil`
 4. Git clone https://github.com/uzairmahmed/Capstone-MJ02
 5. Using crontab, schedule the mqtt file to be run every minute.
    1. To do this, enable crontab service with `/etc/init.d/cron enable`
@@ -93,6 +93,14 @@
    3. Add this line `*/5 * * * * /usr/bin/python /root/Capstone-MJ02/communication/network_mqtt.py`
    4. click `esc` and then type `:wq` and enter
    5. `/etc/init.d/cron start`
+
+## If You're running out of storage space:
+1. opkg update && opkg install cfdisk resize2f
+2. cfdisk /dev/mmcblk0
+3. resize the bottom most partition and reboot
+4. reconnect and reopen shell
+5. losetup /dev/loop1 /dev/mmcblk0p2
+6. resize2fs /dev/loop1
 
 
 ## To Do
