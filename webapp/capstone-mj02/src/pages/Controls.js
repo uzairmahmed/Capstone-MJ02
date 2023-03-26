@@ -34,7 +34,7 @@ function Controlspage (){
     }*/
 
     const PushPower = () => {
-        update(ref(db, iot_device + '/control'), {
+        put(ref(db, iot_device + '/control'), {
             on_off : on_off
           });
     }
