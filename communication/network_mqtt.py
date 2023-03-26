@@ -85,7 +85,8 @@ def send_values_over_mqtt(vals):
 
 def main():  # Create instance of client with client ID “digi_mqtt_test”
     listed = list_connected_clients()
-    connected_devices = parse_connected_clients(listed)
+    addresses = get_hosts()
+    connected_devices = parse_connected_clients(listed, addresses)
     osValues = getOSValues()
     logDict = {
       **osValues,
