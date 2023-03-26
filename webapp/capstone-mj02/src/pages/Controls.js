@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import {db} from "../components/firebaseConfig/firebase";
 import {useState, useEffect} from "react";
-import { getDatabase, ref, onValue, set, update} from "firebase/database";
+import { getDatabase, ref, onValue, set, update, put} from "firebase/database";
 import { Slider } from "../components/Slider.jsx";
 
 function Controlspage (){
