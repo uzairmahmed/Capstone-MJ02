@@ -1,22 +1,27 @@
-import subprocess, re, json
+import subprocess, re, json, psutil, os, threading
 
-def list_system_stats():
-<<<<<<< HEAD
-    cmd = 'iw'
-    temp = subprocess.Popen(['top', '-b', '-n', '1'], stdout = subprocess.PIPE)
-=======
-    temp = subprocess.Popen(['top', ' -b'], stdout = subprocess.PIPE)
->>>>>>> bd4b033a290b8f65169c072960a708e3071b01f3
-    output = temp.communicate()[0]
-    return output.decode('ascii')
+def list_system_stats_python():
+    threading.Timer(5.0, list_system_stats_python).start()
 
+    total_CPUs = psutil.cpu_count(),
+    avg_loads = [x / psutil.cpu_count() * 100 for x in psutil.getloadavg()]
 
-def parse_system_stats(stats):
-    list_of_stats = stats.split('\n')
-    print(list_of_stats[0])
-    print(list_of_stats[1])
-    print(list_of_stats[2])
-    print(list_of_stats[3])
-    print(list_of_stats[4])
+    collector_command = ['service', 'firebase_collector', 'status']
+    server_command = ['service', 'react_server', 'status']
+    kiosk_command = ['service', 'kiosk', 'status']
 
-parse_system_stats(list_system_stats())
+    vals = {
+        "total_memory": psutil.virtual_memory().total,
+        "used_memory": psutil.virtual_memory().used,
+        "total_swap": psutil.swap_memory().total,
+        "used_swap": psutil.swap_memory().used,
+        "total_disk": psutil.disk_usage('/').total,
+        "used_disk": psutil.disk_usage('/').used,
+        "avg_load_1_min": avg_loads[0],
+        "firebase_collector": not bool (subprocess.call(collector_command, stdout = subprocess.PIPE)),
+        "react_server": not bool (subprocess.call(server_command, stdout = subprocess.PIPE)),
+        "kiosk_display": not bool (subprocess.call(kiosk_command, stdout = subprocess.PIPE)),
+    }
+    print(vals)
+
+list_system_stats_python()
