@@ -22,7 +22,7 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
 def main():  # Create instance of client with client ID “digi_mqtt_test”
     client.on_connect = on_connect  # Define callback function for successful connection
     client.on_message = on_message  # Define callback function for receipt of a message
-    client.connect('127.0.0.1', 1883)
+    client.connect("192.168.1.143", 1883)  # Connect to (broker, port, keepalive-time)
     client.subscribe([
         ("router/logs",     1),
         ("router/control",  1),

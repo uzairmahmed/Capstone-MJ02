@@ -78,25 +78,25 @@ def getOSValues():
   
 # Firebase Listener Handlers
 def routerListener(event):
-    if event.type == 'put':
+    # if event.type == 'put':
         if event.path != '/':
             print('router/control', json.dumps({event.path:event.data}))
             client.publish("router/control", json.dumps({event.path:event.data}))
 
 def device1Listener(event):
-    if event.type == 'put':
+    # if event.type == 'put':
         if event.path != '/':
             print('iOT_1/control', json.dumps({event.path:event.data}))
             client.publish("iOT_1/control", json.dumps({event.path:event.data}))
 
 def device2Listener(event):
-    if event.type == 'put':
+    # if event.type == 'put':
         if event.path != '/':
             print('iOT_2/control', json.dumps({event.path:event.data}))
             client.publish("iOT_2/control", json.dumps({event.path:event.data}))
 
 def device3Listener(event):
-    if event.type == 'put':
+    # if event.type == 'put':
         if event.path != '/':
             print('iOT_3/control', json.dumps({event.path:event.data}))
             client.publish("iOT_3/control", json.dumps({event.path:event.data}))
