@@ -34,7 +34,7 @@ function Controlspage (){
     }*/
 
     const PushPower = () => {
-        set(ref(db, iot_device + '/control'), {
+        update(ref(db, iot_device + '/control'), {
             on_off : on_off,
             color : [sliderValueRed, sliderValueGreen, sliderValueBlue].toString()
           });
