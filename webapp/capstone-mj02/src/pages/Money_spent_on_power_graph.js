@@ -4,12 +4,12 @@ import {useState, useEffect} from "react";
 import { getDatabase, ref, onValue, set, orderByChild, startAt, endAt, query} from "firebase/database";
   
 function Moneyspentonpowergraph (){
-    const [iotData, setIotData] = useState("");
     const [iotDatas, setIotDatas] = useState([]);
     const [ogiotDatas, setOgIotDatas] = useState([]);
     const [month_selection , setMonth] = useState("January");
     const [type, setType] = useState();
     const [average, setAverage] = useState();
+    const [counter_daily, setCounterDaily] = useState(0);
     const monthNames = [
       "January",
       "February",
@@ -25,15 +25,14 @@ function Moneyspentonpowergraph (){
       "December",
     ];
     let average_money_spent = 0;
+    let counter = 0; 
 
     useEffect(() =>{
       onValue(ref(db, 'iOT_1'+'/logs/'), snapshot => {
         const data=snapshot.val();
-        var power = snapshot.child("power_mW").key;
         if(data !== null){
           const values = Object.values(data);
           setOgIotDatas(values);
-          const points = iotDatas.map(({power}) => power);
         }
       });
     }, []);
@@ -47,22 +46,26 @@ function Moneyspentonpowergraph (){
         setIotDatas(filteredData);
         console.log(filteredData);
       } else if(type === "Today") {
-        //console.log(ogiotDatas[0].stats.power_mW);
+        
+        //PUT LOGIC HERE FOR FILTERING LAST 24 HRS! 
 
-        for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
-          ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
-          //average_money_spent += ogiotDatas[i].stats.power_mW;
-        } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
-        //THIS IS WHERE WE FILTER OUT THE ZEROS OR SOME SHIT, AND WE CAN SEE HOW LONG IT WAS ON FOR! (THE DEVICE)
         const filteredPoints = ogiotDatas.filter(dataPoint => dataPoint.stats.power_mW > 0);
+        if(counter_daily==0){
+          for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
+            ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
+            //average_money_spent += ogiotDatas[i].stats.power_mW;
+          } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
+          setCounterDaily(1);   
+        }
+        //THIS IS WHERE WE FILTER OUT THE ZEROS OR SOME SHIT, AND WE CAN SEE HOW LONG IT WAS ON FOR! (THE DEVICE)
         for (let i = 0; i < filteredPoints.length; i++) {
           average_money_spent += filteredPoints[i].stats.power_mW;
           //console.log(average_money_spent);
-        }
+        } 
+        counter++;
         average_money_spent = average_money_spent/(24*60*60);
         setAverage(average_money_spent);
         //console.log(filteredPoints[0].stats.power_mW);
-        console.log(average_money_spent);
         setIotDatas(ogiotDatas);
       } else if (type === "7_Days"){
         const now = new Date();
@@ -81,7 +84,8 @@ function Moneyspentonpowergraph (){
     return(
         <div>
            <div>
-              <select defaultValue={type} onChange= {e =>setType(e.target.value)}>
+              <select defaultValue="" onChange= {e =>setType(e.target.value)}>
+                <option value="">Select an option</option>
                 <option value="Today">Today</option>
                 <option value="7_Days">Past 7 days</option>
                 <option value="Month" >Month</option>
@@ -90,8 +94,9 @@ function Moneyspentonpowergraph (){
 
             {type === "Month" && (<div>
               <h1>{month_selection} </h1>
-              <select defaultValue={month_selection} onChange= {e =>setMonth(e.target.value)}>
-                <option value="January" defaultValue>January</option>
+              <select defaultValue="" onChange= {e =>setMonth(e.target.value)}>
+                <option value="">Select a month</option>
+                <option value="January">January</option>
                 <option value="February">February</option>
                 <option value="March">March</option>
                 <option value="April">April</option>
@@ -109,6 +114,9 @@ function Moneyspentonpowergraph (){
 
             <div className="py-5">
                 <h1 className="text-4xl text-center">Power Usage Graph</h1>
+                {type === "Month" && (
+                  <h1 className="text-4xl text-center"> for the month:</h1>
+                )}
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                     <LineChart
                     width={500}

@@ -110,7 +110,8 @@ function Powerusagegraph (){
     return(
         <div>
            <div>
-              <select defaultValue={type} onChange= {e =>setType(e.target.value)}>
+              <select defaultValue="" onChange= {e =>setType(e.target.value)}>
+                <option value="">Select an option</option>
                 <option value="Live">Live</option>
                 <option value="7_Days">Past 7 days</option>
                 <option value="Month" >Month</option>
@@ -119,7 +120,8 @@ function Powerusagegraph (){
 
             {type === "Month" && (<div>
               <h1>{month_selection} </h1>
-              <select defaultValue={month_selection} onChange= {e =>setMonth(e.target.value)}>
+              <select defaultValue="" onChange= {e =>setMonth(e.target.value)}>
+                <option value="">Select a month</option>
                 <option value="January" defaultValue>January</option>
                 <option value="February">February</option>
                 <option value="March">March</option>
