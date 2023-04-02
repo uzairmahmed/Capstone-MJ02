@@ -1,15 +1,15 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import {db} from "../components/firebaseConfig/firebase";
 import {useState, useEffect} from "react";
-import { getDatabase, ref, onValue, set, orderByChild, startAt, endAt, query} from "firebase/database";
+import {ref, onValue} from "firebase/database";
   
 function Moneyspentonpowergraph (){
     const [iotDatas, setIotDatas] = useState([]);
     const [ogiotDatas, setOgIotDatas] = useState([]);
-    const [month_selection , setMonth] = useState("January");
+    const [month_selection , setMonth] = useState("");
     const [type, setType] = useState();
     const [average, setAverage] = useState();
-    const [counter_daily, setCounterDaily] = useState(0);
+    const [counter, setCounter] = useState(0);
     const monthNames = [
       "January",
       "February",
@@ -25,7 +25,6 @@ function Moneyspentonpowergraph (){
       "December",
     ];
     let average_money_spent = 0;
-    let counter = 0; 
 
     useEffect(() =>{
       onValue(ref(db, 'iOT_1'+'/logs/'), snapshot => {
@@ -38,35 +37,48 @@ function Moneyspentonpowergraph (){
     }, []);
 
     useEffect(() => {
-      console.log(ogiotDatas.date);
+      
       if (type === "Month") {
         const filteredData = ogiotDatas.filter(
           (ogiotDatas) => ogiotDatas.month === month_selection
         );
-        setIotDatas(filteredData);
-        console.log(filteredData);
-      } else if(type === "Today") {
-        
-        //PUT LOGIC HERE FOR FILTERING LAST 24 HRS! 
-
-        const filteredPoints = ogiotDatas.filter(dataPoint => dataPoint.stats.power_mW > 0);
-        if(counter_daily==0){
+        if(counter===0){
           for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
             ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
             //average_money_spent += ogiotDatas[i].stats.power_mW;
           } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
-          setCounterDaily(1);   
+          setCounter(1);   
+        }
+        for (let i = 0; i < filteredData.length; i++) {
+          average_money_spent += filteredData[i].stats.power_mW;
+          //console.log(average_money_spent_daily);
+        } 
+        average_money_spent = average_money_spent/(24*60*60*30); //30 must be replaced by the number of days per month!
+        setAverage(average_money_spent);
+        setIotDatas(filteredData);
+      
+      } else if(type === "Today") {
+        //PUT LOGIC HERE FOR FILTERING LAST 24 HRS! 
+
+        const filteredPoints = ogiotDatas.filter(dataPoint => dataPoint.stats.power_mW > 0);
+        if(counter===0){
+          for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
+            ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
+            //average_money_spent += ogiotDatas[i].stats.power_mW;
+          } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
+          setCounter(1);   
         }
         //THIS IS WHERE WE FILTER OUT THE ZEROS OR SOME SHIT, AND WE CAN SEE HOW LONG IT WAS ON FOR! (THE DEVICE)
+        //NOTE: Each point is 5 min
         for (let i = 0; i < filteredPoints.length; i++) {
           average_money_spent += filteredPoints[i].stats.power_mW;
-          //console.log(average_money_spent);
+          //console.log(average_money_spent_daily);
         } 
-        counter++;
         average_money_spent = average_money_spent/(24*60*60);
         setAverage(average_money_spent);
         //console.log(filteredPoints[0].stats.power_mW);
         setIotDatas(ogiotDatas);
+      
       } else if (type === "7_Days"){
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -77,6 +89,20 @@ function Moneyspentonpowergraph (){
         const filteredData7days = ogiotDatas.filter(
           (ogiotDatas) => (ogiotDatas.month === currentMonthName && ogiotDatas.day >= sevenDaysAgoDate)
         );
+        if(counter===0){
+          for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
+            ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
+            //average_money_spent += ogiotDatas[i].stats.power_mW;
+          } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
+          setCounter(1);   
+        }
+
+        for (let i = 0; i < filteredData7days.length; i++) {
+          average_money_spent += filteredData7days[i].stats.power_mW;
+          //console.log(average_money_spent_daily);
+        } 
+        average_money_spent = average_money_spent/(24*60*60*7); // 7 reps, last 7 days! 
+        setAverage(average_money_spent);
         setIotDatas(filteredData7days);
       }
     }, [type, month_selection]);
@@ -93,7 +119,7 @@ function Moneyspentonpowergraph (){
             </div>
 
             {type === "Month" && (<div>
-              <h1>{month_selection} </h1>
+              {/* <h1>{month_selection} </h1> */}
               <select defaultValue="" onChange= {e =>setMonth(e.target.value)}>
                 <option value="">Select a month</option>
                 <option value="January">January</option>
@@ -113,9 +139,9 @@ function Moneyspentonpowergraph (){
 
 
             <div className="py-5">
-                <h1 className="text-4xl text-center">Power Usage Graph</h1>
+                <h1 className="text-4xl text-center">Money Spent Graph</h1>
                 {type === "Month" && (
-                  <h1 className="text-4xl text-center"> for the month:</h1>
+                  <h1 className="text-4xl text-center"> for the month: {month_selection}</h1>
                 )}
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                     <LineChart
