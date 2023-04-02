@@ -139,9 +139,9 @@ function Moneyspentonpowergraph (){
 
 
             <div className="py-5">
-                <h1 className="text-4xl text-center">Money Spent Graph</h1>
+                <h1 className="text-3xl text-center">Money Spent Graph</h1>
                 {type === "Month" && (
-                  <h1 className="text-4xl text-center"> for the month: {month_selection}</h1>
+                  <h1 className="text-3xl text-center"> for the month: {month_selection}</h1>
                 )}
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                     <LineChart
@@ -164,7 +164,7 @@ function Moneyspentonpowergraph (){
                     </LineChart>
                 </ResponsiveContainer>
             </div>
-            <h3>Average Amount spent: ${average}</h3> 
+            <h3 className="text-2xl text-center">Average Amount spent: ${average}</h3> 
         </div>
 
         
