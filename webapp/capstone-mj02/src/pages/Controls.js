@@ -31,7 +31,7 @@ function Controlspage() {
             return error.message
         });
 
-        const tempColor = (vals.iOT_2.control.color.split(','))
+        const tempColor = (vals.iOT_1.control.color.split(','))
         setDevice1(vals.iOT_1.control.on_off);
         setDevice2(vals.iOT_2.control.on_off)
         setHex(rgbaToHexa({ b: tempColor[2], g: tempColor[1], r: tempColor[0], a: 1 }))
@@ -40,7 +40,7 @@ function Controlspage() {
 
     // Push Function
     async function Push (device, val) {
-        var col = (device !== 'iOT_2') ? [255, 255, 255] : [rgb.r, rgb.g, rgb.b]
+        var col = (device !== 'iOT_1') ? [255, 255, 255] : [rgb.r, rgb.g, rgb.b]
 
         await update(ref(db, device + '/control'), {
             on_off: val,
@@ -52,17 +52,10 @@ function Controlspage() {
         <div className='w-full my-10'>
             <div className='mx-auto '>
                 <div className='text-center'>
-                    <div className='flex flex-row justify-between items-center border shadow-md py-5 px-10 mx-10 my-5'>
-                        <div className='flex flex-row items-center'>
-                            <BsBatteryCharging className='w-10 h-10' />
-                            <p className='ml-10 font-medium text-gray-900 text-2xl '>Device 1: Power Bank</p>
-                        </div>
-                        <Toggle toggle={device1} outerFunction={(val) => Push('iOT_1', val)} />
-                    </div>
-                    <div className='flex flex-row justify-between items-center border shadow-md py-5 px-10 mx-10 my-5'>
+                <div className='flex flex-row justify-between items-center border shadow-md py-5 px-10 mx-10 my-5'>
                         <div className='flex flex-row items-center'>
                             <BsFillLightbulbFill className='w-10 h-10' />
-                            <p className='ml-10 font-medium text-gray-900 text-2xl '>Device 2: Light Strip</p>
+                            <p className='ml-10 font-medium text-gray-900 text-2xl '>Device 1: Light Strip</p>
                         </div>
                         <div style={{ backgroundColor: hex }} className="flex flex-col rounded-full border cursor-pointer justify-center items-center">
                             <div onClick={() => { setPickerOpen(true) }} className="w-full h-full">
@@ -79,7 +72,7 @@ function Controlspage() {
                                             <button onClick={() => { setPickerOpen(false) }} className="w-1/2 bg-white shadow-xl p-1 border border-gray-300 hover:bg-gray-300">
                                                 Close
                                             </button>
-                                            <button onClick={() => { Push('iOT_2', device2) }} className="w-1/2 bg-white shadow-xl p-1 border border-gray-300 hover:bg-gray-300">
+                                            <button onClick={() => { Push('iOT_1', device2) }} className="w-1/2 bg-white shadow-xl p-1 border border-gray-300 hover:bg-gray-300">
                                                 Set
                                             </button>
                                         </div>
@@ -88,9 +81,17 @@ function Controlspage() {
                             </div>
                         </div>
                         <div className='flex flex-col items-center'>
-                            <Toggle toggle={device2} outerFunction={(val) => Push('iOT_2', val)} />
+                            <Toggle toggle={device1} outerFunction={(val) => Push('iOT_1', val)} />
                         </div>
                     </div>
+                    <div className='flex flex-row justify-between items-center border shadow-md py-5 px-10 mx-10 my-5'>
+                        <div className='flex flex-row items-center'>
+                            <BsBatteryCharging className='w-10 h-10' />
+                            <p className='ml-10 font-medium text-gray-900 text-2xl '>Device 2: Power Bank</p>
+                        </div>
+                        <Toggle toggle={device2} outerFunction={(val) => Push('iOT_2', val)} />
+                    </div>
+                 
                 </div>
             </div>
         </div>
