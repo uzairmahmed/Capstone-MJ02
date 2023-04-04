@@ -52,7 +52,7 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
 
 
 def getOSValues():
-    threading.Timer(60.0, getOSValues).start()
+    threading.Timer(300.0, getOSValues).start()
     
     total_CPUs = psutil.cpu_count(),
     avg_loads = [x / psutil.cpu_count() * 100 for x in psutil.getloadavg()]
