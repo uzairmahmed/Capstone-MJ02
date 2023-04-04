@@ -4,51 +4,7 @@ import {useState, useEffect} from "react";
 import {ref, onValue} from "firebase/database";
   
 function Deviceonduration (){
-  const data = [
-    {
-      week: 'January 7-14',
-      device_on_duration: 40,
-      
-    },
-    {
-      week: 'Febuary 14-28',
-      device_on_duration: 50,
-      
-    },
-    {
-      week: 'March 1-8',
-      device_on_duration: 70,
-      
-    },
-    {
-      week: 'April 7-14',
-      device_on_duration: 45,
-      
-    },
-  ];
 
-  const data_daily = [
-    {
-      week: 'January 7-14',
-      device_on_duration: 40,
-      
-    },
-    {
-      week: 'Febuary 14-28',
-      device_on_duration: 50,
-      
-    },
-    {
-      week: 'March 1-8',
-      device_on_duration: 70,
-      
-    },
-    {
-      week: 'April 7-14',
-      device_on_duration: 45,
-      
-    },
-  ];
     var today = new Date().getDate();
     const [iotDatas, setIotDatas] = useState([]);
     const [ogiotDatas, setOgIotDatas] = useState([]);
@@ -62,20 +18,106 @@ function Deviceonduration (){
         today: today,
         device_on_duration: 0,
       }]);
-    const [onDurationMonths, setOnDurationMonths] = useState({
-      "January": 0,
-      "February": 0,
-      "March": 0,
-      "April": 0,
-      "May": 0,
-      "June": 0,
-      "July": 0,
-      "August": 0,
-      "September": 0,
-      "October": 0,
-      "November": 0,
-      "December": 0
-    });
+    const [onDurationMonths, setOnDurationMonths] = useState([
+    {
+      month: 'January',
+      device_on_duration: 40,
+      
+    },
+    {
+      month: 'February',
+      device_on_duration: 50,
+      
+    },
+    {
+      month: 'March',
+      device_on_duration: 70,
+      
+    },
+    {
+      month: 'April',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'May',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'June',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'July',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'August',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'September',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'October',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'November',
+      device_on_duration: 45,
+      
+    },
+    {
+      month: 'December',
+      device_on_duration: 45,
+      
+    }
+    ]);
+
+    const [onDurationSevenDays, setOnDurationSevenDays] = useState([
+      {
+        day: 1,
+        device_on_duration: 40,
+        
+      },
+      {
+        day: 2,
+        device_on_duration: 50,
+        
+      },
+      {
+        day: 3,
+        device_on_duration: 70,
+        
+      },
+      {
+        day: 4,
+        device_on_duration: 45,
+        
+      },
+      {
+        day: 5,
+        device_on_duration: 45,
+        
+      },
+      {
+        day: 6,
+        device_on_duration: 45,
+        
+      },
+      {
+        day: 7,
+        device_on_duration: 45,
+        
+      }
+      ]);
 
     const monthNames = [
       "January",
@@ -105,28 +147,35 @@ function Deviceonduration (){
     }, []);
 
     useEffect(() => {
-      
       if (type === "Month") {
-        const filteredData = ogiotDatas.filter(
-          (ogiotDatas) => ogiotDatas.month === month_selection
-        );
         if(counter===0){
-          for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
-            ogiotDatas[i].stats.power_mW = 5; //0.0000000090833 is the mw per 5 min!
-            //average_money_spent += ogiotDatas[i].stats.power_mW;
+            for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
+              ogiotDatas[i].stats.power_mW = 5; //0.0000000090833 is the mw per 5 min!
+              //average_money_spent += ogiotDatas[i].stats.power_mW;
           } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
-          setCounter(1);   
         }
-        for (let i = 0; i < filteredData.length; i++) {
-          average_money_spent += filteredData[i].stats.power_mW;
-        } 
-        average_money_spent = average_money_spent/(24*60*60*30); //30 must be replaced by the number of days per month!
-        setAverage(average_money_spent);
-        setIotDatas(filteredData);
-      
-      } else if(type === "Today") {
-        //PUT LOGIC HERE FOR FILTERING LAST 24 HRS! 
+        for (let i = 0; i < monthNames.length; i++) {
+          const months = monthNames[i];
+          const filteredData = ogiotDatas.filter(
+            (ogiotDatas) => ogiotDatas.month === months
+          );
 
+          for (let i = 0; i < filteredData.length; i++) {
+            on_duration += filteredData[i].stats.power_mW;
+          }
+          const Index = onDurationMonths.findIndex((month) => month.month === months);
+          const updatedOnDurationMonths = [...onDurationMonths];
+          console.log('Month', months)
+          console.log('onDurationMonths:', onDurationMonths);
+          console.log('Index:', Index);
+          console.log('On Duration:', on_duration);
+          console.log('Filtered Data:', filteredData);
+          updatedOnDurationMonths[Index].device_on_duration = on_duration;
+          setOnDurationMonths(updatedOnDurationMonths);
+
+          on_duration = 0;
+        }
+      } else if(type === "Today") {
         const filteredPoints = ogiotDatas.filter(dataPoint => dataPoint.stats.power_mW > 0);
         if(counter===0){
           for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
@@ -134,16 +183,14 @@ function Deviceonduration (){
           } //note, we need it for 24 hrs! AND, each point is taken every 5 min
           setCounter(1);   
         }
-        //THIS IS WHERE WE FILTER OUT THE ZEROS OR SOME SHIT, AND WE CAN SEE HOW LONG IT WAS ON FOR! (THE DEVICE)
-        //NOTE: Each point is 5 min
         for (let i = 0; i < filteredPoints.length; i++) {
           on_duration += filteredPoints[i].stats.power_mW;
-          //console.log(average_money_spent_daily);
         } 
-        //on_duration = on_duration/(24*60*60); //avg time it was on?
+        console.log(on_duration);
         setOnDurationToday([{ today: new Date().toLocaleDateString(), device_on_duration: on_duration }, ...onDurationToday.slice(1)]);
-        //console.log(filteredPoints[0].stats.power_mW);
         setIotDatas(ogiotDatas);
+        on_duration = 0;
+        setOnDuration(0);
       
       } else if (type === "7_Days"){
         const now = new Date();
@@ -227,11 +274,11 @@ function Deviceonduration (){
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                   <BarChart width={730} height={250} data={onDurationMonths}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="week" />
+                    <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="onDuration" fill="#8884d8" />
+                    <Bar dataKey="device_on_duration" fill="#8884d8" />
                   </BarChart>
                 </ResponsiveContainer>
             )}
