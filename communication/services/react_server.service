@@ -1,0 +1,12 @@
+[Unit]
+After=network.target
+ 
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/Capstone-MJ02/webapp/capstone-mj02
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

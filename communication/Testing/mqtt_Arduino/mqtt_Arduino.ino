@@ -3,8 +3,8 @@
 // WiFi
 // const char *ssid = "NW Coextro WIFI"; // Enter your WiFi name
 // const char *password = "wycik96now";  // Enter WiFi password
-const char *ssid = "Uzair's iPhone"; // Enter your WiFi name
-const char *password = "qwertyuiop";  // Enter WiFi password
+const char *ssid = "Capstone"; // Enter your WiFi name
+const char *password = "capstoneMJ02";  // Enter WiFi password
 // MQTT Broker
 const char *mqtt_broker = "172.20.10.10"; // Enter your WiFi or Ethernet IP
 const char *topic = "iOT_1/logs";
@@ -45,8 +45,8 @@ void setup() {
 }
  
  // publish and subscribe
- client.publish(topic, "Hello From ESP8266!");
- client.subscribe(topic2);
+//  client.publish(topic, "Hello From ESP8266!");
+//  client.subscribe(topic2);
 }
 void callback(char *topic, byte *payload, unsigned int length) {
  Serial.print("Message arrived in topic: ");
@@ -74,6 +74,6 @@ void loop() {
  snprintf(buffer, sizeof(buffer), "{'Power': '%d', 'Voltage': %f, 'Current':%f}", dummyPowerValue, (char)dummyVoltageValue, (char)dummyCurrentValue);
 
 
- client.publish(topic, buffer);
+//  client.publish(topic, buffer);
  delay (10*100);
 }

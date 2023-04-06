@@ -49,8 +49,9 @@
 
 ## Security
 1. Go to `Network > Wireless > Edit > Interface Configuration` and set the following:
-   1. ESSID: `Capstone`
-   2. Wireless Security
+   1. Set protocol to N and set to 2.4GHz
+   2. ESSID: `Capstone`
+   3. Wireless Security
       1. Encryption: `WPA2-PSK`
       2. Key: `capstoneMJ02`
 2. Click `Save`, and then `Save and Apply`   
@@ -83,13 +84,24 @@
 
 ## Logging Setup
 1. Open an SSH terminal (`root@192.168.1.1`, password is `mj02`)
-2. Install dependencies with `opkg install git-http python3-pip`
-3. Install paho with `pip install -r paho-mqtt`
+2. Install dependencies with `opkg install git-http python3-pip htop python3-psutil`
+3. Install paho with `pip install -r paho-mqtt psutil`
 4. Git clone https://github.com/uzairmahmed/Capstone-MJ02
-5. `python Capstone-MJ02/communication/network_mqtt.py`
+5. Using crontab, schedule the mqtt file to be run every minute.
+   1. To do this, enable crontab service with `/etc/init.d/cron enable`
+   2. `crontab -e`, then type `i`
+   3. Add this line `*/5 * * * * /usr/bin/python /root/Capstone-MJ02/communication/network_mqtt.py`
+   4. click `esc` and then type `:wq` and enter
+   5. `/etc/init.d/cron start`
 
----
----
+## If You're running out of storage space:
+1. opkg update && opkg install cfdisk resize2f
+2. cfdisk /dev/mmcblk0
+3. resize the bottom most partition and reboot
+4. reconnect and reopen shell
+5. losetup /dev/loop1 /dev/mmcblk0p2
+6. resize2fs /dev/loop1
+
 
 ## To Do
 - Setup VPN with OpenVPN and ExpressVPN

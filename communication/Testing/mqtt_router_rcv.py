@@ -43,6 +43,7 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
     })
 
 
+
 client = mqtt.Client("broker")  # Create instance of client with client ID “digi_mqtt_test”
 client.on_connect = on_connect  # Define callback function for successful connection
 client.on_message = on_message  # Define callback function for receipt of a message

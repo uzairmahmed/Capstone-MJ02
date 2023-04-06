@@ -74,7 +74,18 @@
 3. Clone the Capstone-MJ02 repository with `git clone https://github.com/uzairmahmed/Capstone-MJ02` and login if needed
 4. cd into `Capstone-MJ02/webapp/capstone-mj02`
 5. Install NPM packages with `npm install`
-6. Start the webapp with `npm start`
+6. Start the webapp with `npm start` and then close after verification.
+7.  `sudo apt install xdotool unclutter`
+8.  `sudo raspi-config`
+9.  `System Options` > `Boot / Auto Login` > `Desktop Autologin — Desktop GUI`
+12. `sudo cp Capstone-MJ02/communication/services/kiosk.service /etc/systemd/system`
+13. `sudo cp Capstone-MJ02/communication/services/react_server.service /etc/systemd/system`
+14. `sudo systemctl daemon-reload`
+15. `sudo systemctl enable kiosk.service`
+16. `sudo systemctl enable react_server.service`
+17. `sudo systemctl start kiosk.service`
+17. `sudo systemctl start react_server.service`
+19. 
 
 ## Communication Setup
 3. Install python dependencies with `pip3 install -r requirements.txt`
@@ -83,3 +94,4 @@
 6. `sudo systemctl daemon-reload`
 7. `sudo systemctl enable firebase_collector.service`
 8. `sudo systemctl start firebase_collector.service`
+
