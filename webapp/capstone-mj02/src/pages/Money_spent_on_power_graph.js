@@ -8,8 +8,7 @@ function Moneyspentonpowergraph (){
     const [ogiotDatas, setOgIotDatas] = useState([]);
     const [month_selection , setMonth] = useState("");
     const [type, setType] = useState();
-    const [average, setAverage] = useState();
-    const [counter, setCounter] = useState(0);
+    const [average, setAverage] = useState(0);
     const monthNames = [
       "January",
       "February",
@@ -37,49 +36,46 @@ function Moneyspentonpowergraph (){
     }, []);
 
     useEffect(() => {
-      
       if (type === "Month") {
+        setAverage(0);
         const filteredData = ogiotDatas.filter(
           (ogiotDatas) => ogiotDatas.month === month_selection
         );
-        if(counter===0){
-          for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
-            ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
-            //average_money_spent += ogiotDatas[i].stats.power_mW;
-          } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
-          setCounter(1);   
-        }
+
         for (let i = 0; i < filteredData.length; i++) {
           average_money_spent += filteredData[i].stats.power_mW;
-          //console.log(average_money_spent_daily);
         } 
-        average_money_spent = average_money_spent/(24*60*60*30); //30 must be replaced by the number of days per month!
+        average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60*30); //30 must be replaced by the number of days per month!
         setAverage(average_money_spent);
+        console.log(filteredData);
         setIotDatas(filteredData);
       
       } else if(type === "Today") {
-        //PUT LOGIC HERE FOR FILTERING LAST 24 HRS! 
+        setAverage(0);
+        const now = new Date();
+        const today = now.getDate();
+        const currentMonthName = monthNames[now.getMonth()]; // get the name of the current month
+        
+        console.log(currentMonthName);
+        console.log(today);
+        console.log(ogiotDatas[100])
 
-        const filteredPoints = ogiotDatas.filter(dataPoint => dataPoint.stats.power_mW > 0);
-        if(counter===0){
-          for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
-            ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
-            //average_money_spent += ogiotDatas[i].stats.power_mW;
-          } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
-          setCounter(1);   
-        }
+        const filteredDataToday = ogiotDatas.filter(
+          (ogiotDatas) => (ogiotDatas.month === currentMonthName && parseInt(ogiotDatas.day.padStart(2, '0')) === today)
+        );
+
+        const filteredPoints = filteredDataToday.filter(dataPoint => dataPoint.stats.power_mW > 0);
         //THIS IS WHERE WE FILTER OUT THE ZEROS OR SOME SHIT, AND WE CAN SEE HOW LONG IT WAS ON FOR! (THE DEVICE)
-        //NOTE: Each point is 5 min
+        //NOTE: Each point is 30 sec
         for (let i = 0; i < filteredPoints.length; i++) {
           average_money_spent += filteredPoints[i].stats.power_mW;
-          //console.log(average_money_spent_daily);
         } 
-        average_money_spent = average_money_spent/(24*60*60);
+        average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60);
         setAverage(average_money_spent);
-        //console.log(filteredPoints[0].stats.power_mW);
-        setIotDatas(ogiotDatas);
-      
+        console.log(filteredDataToday);
+        setIotDatas(filteredDataToday);
       } else if (type === "7_Days"){
+        setAverage(0);
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         const sevenDaysAgoMonth = sevenDaysAgo.getMonth(); // returns a number between 0 and 11 representing the month (0 = January, 1 = February, etc.)
@@ -89,19 +85,12 @@ function Moneyspentonpowergraph (){
         const filteredData7days = ogiotDatas.filter(
           (ogiotDatas) => (ogiotDatas.month === currentMonthName && ogiotDatas.day >= sevenDaysAgoDate)
         );
-        if(counter===0){
-          for (let i = 0; i < ogiotDatas.length; i++) { //HERE IS WHERE WE MULTIPLY POWER USAGE FOR 5 MIN, AND THEN STORES IT WITHIN THE POWER_MW
-            ogiotDatas[i].stats.power_mW *= 0.0000000090833; //0.0000000090833 is the mw per 5 min!
-            //average_money_spent += ogiotDatas[i].stats.power_mW;
-          } //note, we neeed it for 24 hrs! AND, each point is taken every 5 min
-          setCounter(1);   
-        }
 
         for (let i = 0; i < filteredData7days.length; i++) {
           average_money_spent += filteredData7days[i].stats.power_mW;
           //console.log(average_money_spent_daily);
         } 
-        average_money_spent = average_money_spent/(24*60*60*7); // 7 reps, last 7 days! 
+        average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60*7); // 7 reps, last 7 days! 
         setAverage(average_money_spent);
         setIotDatas(filteredData7days);
       }
@@ -136,7 +125,6 @@ function Moneyspentonpowergraph (){
                 <option value="December">December</option>
               </select>
             </div>)}
-
 
             <div className="py-5">
                 <h1 className="text-3xl text-center">Money Spent Graph</h1>

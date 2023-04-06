@@ -1,6 +1,29 @@
 import {Link} from 'react-router-dom';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {db} from "../components/firebaseConfig/firebase";
+import {useState, useEffect} from "react";
+import {ref, onValue} from "firebase/database";
 
 function Networkstatisticspage (){
+    var today = new Date().getDate();
+    const [iotDatas, setIotDatas] = useState([]);
+    const [ogNetworkDatas, setOgNetworkDatas] = useState([]);
+    const [month_selection , setMonth] = useState("");
+    const [type, setType] = useState();
+    const [average, setAverage] = useState();
+    const [counter, setCounter] = useState(0);
+    const [onDuration, setOnDuration] = useState();
+
+    useEffect(() =>{
+      onValue(ref(db, 'router'+'/logs/'), snapshot => {
+        const data=snapshot.val();
+        if(data !== null){
+          const values = Object.values(data);
+          setOgNetworkDatas(values);
+          console.log(values);
+        }
+      });
+    }, []);
     return(
         <div className='w-full my-10'>
             <div className='max-width-[1240px] mx-auto '>

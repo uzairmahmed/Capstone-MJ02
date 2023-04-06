@@ -89,7 +89,6 @@ function Powerusagegraph (){
         setIotDatas(filteredData);
         console.log(filteredData);
       } else if(type === "Live") {
-        console.log(iotDatas);
         setIotDatas(ogiotDatas);
       } else if (type === "7_Days"){
         const now = new Date();
