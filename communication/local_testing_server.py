@@ -77,9 +77,9 @@ def main():  # Create instance of client with client ID “digi_mqtt_test”
         ("iOT_3/logs",      1),
     ])
     # Start Firebase Listeners
-    firebase_admin.db.reference('router/control').listen(routerListener)
-    firebase_admin.db.reference('iOT_1/control').listen(device1Listener)
-    firebase_admin.db.reference('iOT_2/control').listen(device2Listener)
+    firebase_admin.db.reference('router').listen(routerListener)
+    firebase_admin.db.reference('iOT_1').listen(device1Listener)
+    firebase_admin.db.reference('iOT_2').listen(device2Listener)
     firebase_admin.db.reference('iOT_3/control').listen(device3Listener)
 
     client.loop_forever()  # Start networking daemon
