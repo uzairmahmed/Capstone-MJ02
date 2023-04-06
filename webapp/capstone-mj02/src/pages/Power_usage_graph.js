@@ -23,71 +23,25 @@ function Powerusagegraph (){
       "November",
       "December",
     ];
-
-    //read
-    /* 
-    const queryRef = query(
-      ref(db, 'your-data-path'),
-      orderByChild('timestamp'), // Order the data by timestamp or another relevant child key
-      startAt(`2023-${month}-01T00:00:00`), // Specify the start of the month you want to retrieve
-      endAt(`2023-${month}-31T23:59:59`) // Specify the end of the month you want to retrieve
-    );
-    */
-    /*useEffect(() =>{
-      let queryRef; 
-      if (type === "Month") {
-        console.log(type);
-        iotDatas = [];
-        let startTimestamp = new Date(`2023-02-01T00:00:00`);
-        let endTimestamp = new Date(`2023-02-31T23:59:59`);
-        console.log(startTimestamp);
-        console.log(endTimestamp);
-        const db_ref = ref(db, 'iOT_1'+ '/logs/')
-        //queryRef = query(ref(db, 'iOT_1' + '/logs/'),orderByChild('logs'),startAt(`2023-02-01T00:00:00`),endAt(`2023-02-31T23:59:59`));
-        queryRef = orderByChild(db_ref, `month`).equalTo(`February`);
-      } else {
-        iotDatas = [];
-        queryRef = ref(db, 'iOT_1' + '/logs/');
-      }
-      onValue(queryRef, snapshot => {
-        const data=snapshot.val();
-        var power = snapshot.child("power_mW").key;
-        //console.log(data);
-        //console.log(power);
-        if(data !== null){
-          const values = Object.values(data);
-          console.log(values);
-          setIotDatas(values);
-          const points = iotDatas.map(({power}) => power);
-          //console.log(points);
-        }
-      });
-    }, [type, month_selection]);*/
     //read
     useEffect(() =>{
       onValue(ref(db, 'iOT_1'+'/logs/'), snapshot => {
         const data=snapshot.val();
         var power = snapshot.child("power_mW").key;
-        //console.log(data);
-        //console.log(power);
         if(data !== null){
           const values = Object.values(data);
-          //console.log(values);
           setOgIotDatas(values);
           const points = iotDatas.map(({power}) => power);
-          //console.log(points);
         }
       });
     }, []);
 
     useEffect(() => {
-      console.log(ogiotDatas.date);
       if (type === "Month") {
         const filteredData = ogiotDatas.filter(
           (ogiotDatas) => ogiotDatas.month === month_selection
         );
         setIotDatas(filteredData);
-        console.log(filteredData);
       } else if(type === "Live") {
         setIotDatas(ogiotDatas);
       } else if (type === "7_Days"){
@@ -97,8 +51,6 @@ function Powerusagegraph (){
         const sevenDaysAgoDate = sevenDaysAgo.getDate(); // returns a number between 1 and 31 representing the day of the month
         const currentMonthName = monthNames[sevenDaysAgoMonth];
         
-        console.log(currentMonthName);
-        console.log(sevenDaysAgoDate);
         const filteredData7days = ogiotDatas.filter(
           (ogiotDatas) => (ogiotDatas.month === currentMonthName && ogiotDatas.day >= sevenDaysAgoDate)
         );

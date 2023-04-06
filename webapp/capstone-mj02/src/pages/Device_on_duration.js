@@ -177,10 +177,6 @@ function Deviceonduration (){
         const now = new Date();
         const today = now.getDate();
         const currentMonthName = monthNames[now.getMonth()]; // get the name of the current month
-        
-        console.log(currentMonthName);
-        console.log(today);
-        console.log(ogiotDatas[100])
 
         const filteredDataToday = ogiotDatas.filter(
           (ogiotDatas) => (ogiotDatas.month === currentMonthName && parseInt(ogiotDatas.day.padStart(2, '0')) === today)

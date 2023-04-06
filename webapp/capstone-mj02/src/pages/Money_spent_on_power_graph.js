@@ -47,7 +47,7 @@ function Moneyspentonpowergraph (){
         } 
         average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60*30); //30 must be replaced by the number of days per month!
         setAverage(average_money_spent);
-        console.log(filteredData);
+
         setIotDatas(filteredData);
       
       } else if(type === "Today") {
@@ -56,10 +56,6 @@ function Moneyspentonpowergraph (){
         const today = now.getDate();
         const currentMonthName = monthNames[now.getMonth()]; // get the name of the current month
         
-        console.log(currentMonthName);
-        console.log(today);
-        console.log(ogiotDatas[100])
-
         const filteredDataToday = ogiotDatas.filter(
           (ogiotDatas) => (ogiotDatas.month === currentMonthName && parseInt(ogiotDatas.day.padStart(2, '0')) === today)
         );
@@ -72,7 +68,6 @@ function Moneyspentonpowergraph (){
         } 
         average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60);
         setAverage(average_money_spent);
-        console.log(filteredDataToday);
         setIotDatas(filteredDataToday);
       } else if (type === "7_Days"){
         setAverage(0);
@@ -88,7 +83,6 @@ function Moneyspentonpowergraph (){
 
         for (let i = 0; i < filteredData7days.length; i++) {
           average_money_spent += filteredData7days[i].stats.power_mW;
-          //console.log(average_money_spent_daily);
         } 
         average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60*7); // 7 reps, last 7 days! 
         setAverage(average_money_spent);
