@@ -2,6 +2,7 @@
 #include <PubSubClient.h>
 #include <Adafruit_INA219.h>
 #include <stdlib.h>
+#include <ArduinoJson.h>
 
 //Current Sensor
 Adafruit_INA219 ina219;
@@ -23,14 +24,14 @@ const int resolution = 256;
 // WiFi
 // const char *ssid = "NW Coextro WIFI"; // Enter your WiFi name
 // const char *password = "wycik96now";  // Enter WiFi password
-// const char *ssid = "iPhone"; // Enter your WiFi name
-// const char *password = "12345678";  // Enter WiFi password
-const char *ssid = "Capstone"; // Enter your WiFi name
-const char *password = "capstoneMJ02";  // Enter WiFi password
+const char *ssid = "iPhone"; // Enter your WiFi name
+const char *password = "12345678";  // Enter WiFi password
+// const char *ssid = "Capstone"; // Enter your WiFi name
+// const char *password = "capstoneMJ02";  // Enter WiFi password
 // MQTT Broker
 
-//const char *mqtt_broker = "172.20.10.4"; // Enter your WiFi or Ethernet IP
-const char *mqtt_broker = "192.168.1.143"; // Enter your WiFi or Ethernet IP
+const char *mqtt_broker = "172.20.10.4"; // Enter your WiFi or Ethernet IP
+//const char *mqtt_broker = "192.168.1.143"; // Enter your WiFi or Ethernet IP
 const char *topic = "iOT_1/logs";
 const char *topic2 = "iOT_1/control";
 const int mqtt_port = 1883;
@@ -111,22 +112,35 @@ void callback(char *topic, byte *payload, unsigned int length) {
   Serial.print("Message arrived in topic: ");
   Serial.println(topic);
   Serial.print("Message:");
-  String myString = "";// String((char *) payload);
+  const char* myString = "";// String((char *) payload);
   Serial.print(myString);
   for (int i = 0; i < length; i++) {
     //This is where the command is recieved 
     Serial.print((char) payload[i]);
     myString += ((char) payload[i]);
   }
-  //Serial.print(myString);
-  String power = "PowerOff";
-  if(power.equals(myString)){
+
+  const char* json = myString;
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, json);
+  
+  bool onOff = doc["/on_off"];
+  Serial.println("The value of /on_off is:");
+  Serial.println(onOff);
+  // //Serial.print(myString);
+  // String power = "PowerOff";
+  // Serial.print("\nPowering off");
+  if(onOff){
+    Serial.print("\nPowering off");
+    digitalWrite(relay, LOW);
+  }
+  else{
     Serial.print("\nPowering off");
     digitalWrite(relay, HIGH);
   }
-  delay(5000);
-  Serial.print("\nPowering on");
-  digitalWrite(relay, LOW);
+  // delay(5000);
+  // Serial.print("\nPowering on");
+  // digitalWrite(relay, LOW);
 
 
 
