@@ -17,7 +17,7 @@ const char *ssid = "Capstone";         // Enter your WiFi name
 const char *password = "capstoneMJ02"; // Enter WiFi password
 // MQTT Broker
 
-const char *mqtt_broker = "192.168.1.163"; // Enter your WiFi or Ethernet IP
+const char *mqtt_broker = "192.168.1.143"; // Enter your WiFi or Ethernet IP
 // const char *mqtt_broker = "192.168.1.143"; // Enter your WiFi or Ethernet IP
 const char *topic = "iOT_1/logs";
 const char *topic2 = "iOT_1/control";

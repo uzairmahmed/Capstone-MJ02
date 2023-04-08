@@ -24,14 +24,15 @@ def on_connect(client, userdata, flags, rc):  # The callback for when
 def on_message(client, userdata, msg):  # The callback for when a PUBLISH 
     print(userdata)
     print(client)
-    print("Message received")  # Print a received msg
 
     split = msg.topic.split('/')
     device = split[0]
     mode = split[1]
-    if mode != "debug":
-        message = msg.payload.decode('ascii').replace("'", '"').replace('/','SLASH')
 
+    message = msg.payload.decode('ascii').replace("'", '"').replace('/','SLASH')
+    print(device + "(" + mode + ") said: " + message)
+
+    if mode != "debug":
         now = datetime.datetime.now()
         pathString = now.isoformat().replace('.',':')
 
