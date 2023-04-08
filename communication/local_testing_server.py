@@ -22,8 +22,6 @@ def on_connect(client, userdata, flags, rc):  # The callback for when
 
 # MQTT Listener
 def on_message(client, userdata, msg):  # The callback for when a PUBLISH 
-    print(userdata)
-    print(client)
 
     split = msg.topic.split('/')
     device = split[0]
@@ -37,7 +35,6 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
         pathString = now.isoformat().replace('.',':')
 
         logDict = {"date":now.isoformat(),**json.loads(message)}
-        print(logDict)
         db.reference('/' + device + '/' + mode + '/' + pathString).set(logDict)
 
 # Firebase Listener Handlers

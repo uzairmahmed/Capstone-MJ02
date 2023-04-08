@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <ArduinoJson.h>
 
+unsigned long previousMillis = 0;
+unsigned long measurementinterval = 10000;
+
 String redString = "255";
 String greenString = "255";
 String blueString = "255";
@@ -106,6 +109,17 @@ void callback(char *topic, byte *payload, unsigned int length)
 void loop()
 {
 
+  client.loop();
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis > measurementinterval) {
+    previousMillis = currentMillis;
+    measureAndPublish();
+  }
+}
+
+void measureAndPublish()
+{
   if (count == 0)
   {
     redString = "255";
@@ -128,7 +142,6 @@ void loop()
     count = 0;
   }
 
-  client.loop();
   float shuntvoltage = 0;
   float busvoltage = 0;
   float current_mA = 0;
@@ -148,5 +161,4 @@ void loop()
   sprintf(buffer, "{\"current_mA\": %.2f, \"loadvoltage\": %.2f, \"power_mW\": %.2f}", current_mA, loadvoltage, power_mW);
   Serial.println(buffer);
   client.publish(topic, buffer);
-  delay(10000);
 }
