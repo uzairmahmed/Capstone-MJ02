@@ -29,26 +29,15 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
     split = msg.topic.split('/')
     device = split[0]
     mode = split[1]
-    message = msg.payload.decode('ascii').replace("'", '"').replace('/','SLASH')
+    if mode != "debug":
+        message = msg.payload.decode('ascii').replace("'", '"').replace('/','SLASH')
 
-    now = datetime.datetime.now()
-    pathString = now.isoformat().replace('.',':')
+        now = datetime.datetime.now()
+        pathString = now.isoformat().replace('.',':')
 
-    logDict = {"date":now.isoformat(),**json.loads(message)}
-    print(logDict)
-    db.reference('/' + device + '/' + mode + '/' + pathString).set(logDict)
-
-    # month = now.strftime('%B')
-    # day =  now.strftime('%d')
-    # current_time =  now.strftime('%B:%d:%H:%M:%S')
-
-    #Send data to firebase
-    # db.reference('/' + device + '/' + mode + '/' + pathString).set({
-    #     'month' : month,
-    #     'day': day,
-    #     'current time': current_time,
-    #     'stats':json.loads(message)
-    # })
+        logDict = {"date":now.isoformat(),**json.loads(message)}
+        print(logDict)
+        db.reference('/' + device + '/' + mode + '/' + pathString).set(logDict)
 
 
 def getOSValues():
@@ -112,13 +101,15 @@ def main():  # Create instance of client with client ID “digi_mqtt_test”
         ("iOT_1/logs",      1),
         ("iOT_2/logs",      1),
         ("iOT_3/logs",      1),
+        ("iOT_1/debug",      1),
+        ("iOT_2/debug",      1),
     ])
     getOSValues()
     # Start Firebase Listeners
     firebase_admin.db.reference('router/control').listen(routerListener)
-    firebase_admin.db.reference('iOT_1/control').listen(device1Listener)
-    firebase_admin.db.reference('iOT_2/control').listen(device2Listener)
-    firebase_admin.db.reference('iOT_3/control').listen(device3Listener)
+    firebase_admin.db.reference('iOT_1').listen(device1Listener)
+    firebase_admin.db.reference('iOT_2').listen(device2Listener)
+    firebase_admin.db.reference('iOT_3').listen(device3Listener)
 
     client.loop_forever()  # Start networking daemon
 
