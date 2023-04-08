@@ -80,7 +80,7 @@ def device3Listener(event):
 def main():  # Create instance of client with client ID “digi_mqtt_test”
     client.on_connect = on_connect  # Define callback function for successful connection
     client.on_message = on_message  # Define callback function for receipt of a message
-    client.connect('172.20.10.4', 1883)
+    client.connect('192.168.1.163', 1883)
     client.subscribe([
         ("router/logs",     1),
         ("central/logs",     1),
