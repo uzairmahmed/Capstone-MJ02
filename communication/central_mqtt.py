@@ -95,7 +95,7 @@ def device3Listener(event):
 def main():  # Create instance of client with client ID “digi_mqtt_test”
     client.on_connect = on_connect  # Define callback function for successful connection
     client.on_message = on_message  # Define callback function for receipt of a message
-    client.connect('127.0.0.1', 1883)
+    client.connect('localhost', 1883)
     client.subscribe([
         ("iOT_1/debug",      1),
         ("iOT_2/debug",      1),
