@@ -66,7 +66,7 @@ void setup()
   }
 
   // publish and subscribe
-  client.publish(topic, "Hello From ESP8266!");
+  client.publish(topic3, "Hello From ESP8266!");
   client.subscribe(topic2);
 }
 void callback(char *topic, byte *payload, unsigned int length)
@@ -93,7 +93,7 @@ void callback(char *topic, byte *payload, unsigned int length)
 
   if (onOff)
   {
-    Serial.print("\nPowering off");
+    Serial.print("\nPowering on");
   }
   else
   {
@@ -137,9 +137,9 @@ void loop()
   char destination[8];
 
   shuntvoltage = 0.69;
-  busvoltage = 0.69 ;
-  current_mA = 0.69 ;
-  power_mW = 0.69 ;
+  busvoltage = 0.69;
+  current_mA = 0.69;
+  power_mW = 0.69;
   loadvoltage = busvoltage + (shuntvoltage / 1000);
 
   // Replace the string here for sending the data

@@ -97,13 +97,12 @@ def main():  # Create instance of client with client ID “digi_mqtt_test”
     client.on_message = on_message  # Define callback function for receipt of a message
     client.connect('127.0.0.1', 1883)
     client.subscribe([
+        ("iOT_1/debug",      1),
+        ("iOT_2/debug",      1),
         ("router/logs",     1),
         ("central/logs",     1),
         ("iOT_1/logs",      1),
         ("iOT_2/logs",      1),
-        ("iOT_3/logs",      1),
-        ("iOT_1/debug",      1),
-        ("iOT_2/debug",      1),
     ])
     getOSValues()
     # Start Firebase Listeners
