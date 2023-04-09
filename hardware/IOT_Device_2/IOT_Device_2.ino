@@ -16,23 +16,26 @@ const int relay = 15;
 const int resolution = 256;
 
 unsigned long previousMillis = 0;
-unsigned long measurementinterval = 60000;
+unsigned long measurementinterval = 1000;
 
 // WiFi
 // const char *ssid = "NW Coextro WIFI"; // Enter your WiFi name
 // const char *password = "wycik96now";  // Enter WiFi password
-// const char *ssid = "iPhone";       // Enter your WiFi name
-// const char *password = "12345678"; // Enter WiFi password
-const char *ssid = "Capstone";         // Enter your WiFi name
-const char *password = "capstoneMJ02"; // Enter WiFi password
+const char *ssid = "iPhone";       // Enter your WiFi name
+const char *password = "12345678"; // Enter WiFi password
+// const char *ssid = "Capstone";         // Enter your WiFi name
+// const char *password = "capstoneMJ02"; // Enter WiFi password
 
 // MQTT Broker
-const char *mqtt_broker = "192.168.1.143"; // Enter your WiFi or Ethernet IP
+const char *mqtt_broker = "172.20.10.4"; // Enter your WiFi or Ethernet IP
 const int mqtt_port = 1883;
 
 const char *topic = "iOT_2/logs";
 const char *topic2 = "iOT_2/control";
 const char *topic3 = "iOT_2/debug";
+
+WiFiClient espClient;
+PubSubClient client(espClient);
 
 void setup()
 {
