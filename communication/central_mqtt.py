@@ -24,31 +24,21 @@ def on_connect(client, userdata, flags, rc):  # The callback for when
 def on_message(client, userdata, msg):  # The callback for when a PUBLISH 
     print(userdata)
     print(client)
-    print("Message received")  # Print a received msg
 
     split = msg.topic.split('/')
     device = split[0]
     mode = split[1]
+
     message = msg.payload.decode('ascii').replace("'", '"').replace('/','SLASH')
+    print(device + "(" + mode + ") said: " + message)
 
-    now = datetime.datetime.now()
-    pathString = now.isoformat().replace('.',':')
+    if mode != "debug":
+        now = datetime.datetime.now()
+        pathString = now.isoformat().replace('.',':')
 
-    logDict = {"date":now.isoformat(),**json.loads(message)}
-    print(logDict)
-    db.reference('/' + device + '/' + mode + '/' + pathString).set(logDict)
-
-    # month = now.strftime('%B')
-    # day =  now.strftime('%d')
-    # current_time =  now.strftime('%B:%d:%H:%M:%S')
-
-    #Send data to firebase
-    # db.reference('/' + device + '/' + mode + '/' + pathString).set({
-    #     'month' : month,
-    #     'day': day,
-    #     'current time': current_time,
-    #     'stats':json.loads(message)
-    # })
+        logDict = {"date":now.isoformat(),**json.loads(message)}
+        print(logDict)
+        db.reference('/' + device + '/' + mode + '/' + pathString).set(logDict)
 
 
 def getOSValues():
@@ -105,20 +95,21 @@ def device3Listener(event):
 def main():  # Create instance of client with client ID “digi_mqtt_test”
     client.on_connect = on_connect  # Define callback function for successful connection
     client.on_message = on_message  # Define callback function for receipt of a message
-    client.connect('127.0.0.1', 1883)
+    client.connect('localhost', 1883)
     client.subscribe([
+        ("iOT_1/debug",      1),
+        ("iOT_2/debug",      1),
         ("router/logs",     1),
         ("central/logs",     1),
         ("iOT_1/logs",      1),
         ("iOT_2/logs",      1),
-        ("iOT_3/logs",      1),
     ])
     getOSValues()
     # Start Firebase Listeners
     firebase_admin.db.reference('router/control').listen(routerListener)
-    firebase_admin.db.reference('iOT_1/control').listen(device1Listener)
-    firebase_admin.db.reference('iOT_2/control').listen(device2Listener)
-    firebase_admin.db.reference('iOT_3/control').listen(device3Listener)
+    firebase_admin.db.reference('iOT_1').listen(device1Listener)
+    firebase_admin.db.reference('iOT_2').listen(device2Listener)
+    firebase_admin.db.reference('iOT_3').listen(device3Listener)
 
     client.loop_forever()  # Start networking daemon
 
