@@ -54,16 +54,16 @@ void setup()
     String client_id = "esp8266-client-";
     client_id += String(WiFi.macAddress());
 
-    Serial.printf("The client %s connects to mosquitto mqtt broker\n", client_id.c_str());
+    Serial.printf("The client: %s is connecting to Mosquitto Broker\n", client_id.c_str());
 
     if (client.connect(client_id.c_str()))
     {
-      Serial.println("Public emqx mqtt broker connected");
+      Serial.println("MQTT Broker connected");
     }
     else
     {
       Serial.print("failed with state ");
-      Serial.print(client.state());
+      Serial.println(client.state());
       delay(2000);
     }
   }
@@ -93,20 +93,25 @@ void callback(char *topic, byte *message, unsigned int length)
   JsonObject internalobj = obj["/control"];
 
   String on_off_val = internalobj["on_off"];
-  if (on_off_val == "true")
+  if (on_off_val != "null")
   {
-    Serial.println("\nPowering on");
-  }
-  else if (on_off_val == "false")
-  {
-    Serial.println("\nPowering off");
+    if (on_off_val == "true")
+    {
+      Serial.println("\nPowering on");
+    }
+    else if (on_off_val == "false")
+    {
+      Serial.println("\nPowering off");
+    }
   }
 
   String color_val = internalobj["color"];
-  int rCol = color_val.substring(0, 3).toInt();
-  int gCol = color_val.substring(4, 7).toInt();
-  int bCol = color_val.substring(8, 11).toInt();
-  
+  if (color_val != "null")
+  {
+    int rCol = color_val.substring(0, 3).toInt();
+    int gCol = color_val.substring(4, 7).toInt();
+    int bCol = color_val.substring(8, 11).toInt();
+  }
 }
 void loop()
 {
@@ -123,28 +128,6 @@ void loop()
 
 void measureAndPublish()
 {
-  if (count == 0)
-  {
-    redString = "255";
-    greenString = "0";
-    blueString = "0";
-    count = count + 1;
-  }
-  else if (count == 1)
-  {
-    redString = "0";
-    greenString = "255";
-    blueString = "0";
-    count = count + 1;
-  }
-  else
-  {
-    redString = "0";
-    greenString = "0";
-    blueString = "255";
-    count = 0;
-  }
-
   float shuntvoltage = 0;
   float busvoltage = 0;
   float current_mA = 0;
