@@ -62,24 +62,35 @@ def getOSValues():
         "react_server": not bool (subprocess.call(server_command, stdout = subprocess.PIPE)),
         "kiosk_display": not bool (subprocess.call(kiosk_command, stdout = subprocess.PIPE)),
     }
+    
+    return vals
 
-def main():  # Create instance of client with client ID “digi_mqtt_test”
-    client.on_connect = on_connect  # Define callback function for successful connection
-    client.on_message = on_message  # Define callback function for receipt of a message
-    client.connect('localhost', 1883)
+def send_values_over_mqtt(vals):
+    mqttc = mqtt.Client("router_node")
+    mqttc.connect("192.168.1.143", 1883) 
+    
+    mqttc.publish("laptop/logs", json.dumps(vals))
+
+def main():  
+    client.on_connect = on_connect 
+    client.on_message = on_message 
+    client.connect('192.168.1.143', 1883)
     client.subscribe([
-        ("router/logs",     1),
-        ("central/logs",     1),
-        ("iOT_1/logs",      1),
-        ("iOT_2/logs",      1),
-        ("iOT_1/control",      1),
-        ("iOT_2/control",      1),
-        ("iOT_1/debug",      1),
-        ("iOT_2/debug",      1),
+        ("router/logs",   1),
+        ("central/logs",  1),
+        ("iOT_1/logs",    1),
+        ("iOT_2/logs",    1),
+        ("laptop/logs",   1),
+        ("iOT_1/control", 1),
+        ("iOT_2/control", 1),
+        ("iOT_1/debug",   1),
+        ("iOT_2/debug",   1),
     ])
-    getOSValues()
+    osValues = getOSValues()
+    logDict = {**osValues}
 
-    client.loop_forever()  # Start networking daemon
+    send_values_over_mqtt(logDict)
+    client.loop_forever()
 
 if __name__ == '__main__':
     main()

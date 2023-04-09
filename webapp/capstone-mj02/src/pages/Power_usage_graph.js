@@ -2,7 +2,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import {db} from "../components/firebaseConfig/firebase";
 import {useState, useEffect} from "react";
 import { getDatabase, ref, onValue, set, orderByChild, startAt, endAt, query} from "firebase/database";
-  
+import moment from 'moment';
+
 function Powerusagegraph (){
     const [iotData, setIotData] = useState("");
     const [iotDatas, setIotDatas] = useState([]);
@@ -25,47 +26,63 @@ function Powerusagegraph (){
     ];
     //read
     useEffect(() =>{
-      onValue(ref(db, 'iOT_1'+'/logs/'), snapshot => {
+      onValue(ref(db, 'iOT_2'+'/logs/'), snapshot => {
         const data=snapshot.val();
-        var power = snapshot.child("power_mW").key;
         if(data !== null){
           const values = Object.values(data);
+          console.log(data)
           setOgIotDatas(values);
-          const points = iotDatas.map(({power}) => power);
         }
       });
     }, []);
 
     useEffect(() => {
+      // console.log(new Date(ogiotDatas[0].date).toLocaleString('default', {month:'long'}))
       if (type === "Month") {
         const filteredData = ogiotDatas.filter(
-          (ogiotDatas) => ogiotDatas.month === month_selection
+          (ogiotDatas) => new Date(ogiotDatas.date).toLocaleString('default', {month:'long'}) === month_selection
         );
         setIotDatas(filteredData);
-      } else if(type === "Live") {
+      } else if(type === "All") {
         setIotDatas(ogiotDatas);
       } else if (type === "7_Days"){
         const now = new Date();
-        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
         const sevenDaysAgoMonth = sevenDaysAgo.getMonth(); // returns a number between 0 and 11 representing the month (0 = January, 1 = February, etc.)
         const sevenDaysAgoDate = sevenDaysAgo.getDate(); // returns a number between 1 and 31 representing the day of the month
-        const currentMonthName = monthNames[sevenDaysAgoMonth];
         
         const filteredData7days = ogiotDatas.filter(
-          (ogiotDatas) => (ogiotDatas.month === currentMonthName && ogiotDatas.day >= sevenDaysAgoDate)
+          (ogiotDatas) => (new Date(ogiotDatas.date).getMonth() === sevenDaysAgoMonth && new Date(ogiotDatas.date).getDate() >= sevenDaysAgoDate)
         );
         setIotDatas(filteredData7days);
+
+      } else if (type === "Live") {
+        //two mins ago
+        const now = new Date();
+        const tenMinsAgo = new Date(now.getTime() - (2 * 60 * 1000));
+        const tenMinsAgoMonth = tenMinsAgo.getMonth(); // returns a number between 0 and 11 representing the month (0 = January, 1 = February, etc.)
+        const tenMinsAgoDate = tenMinsAgo.getDate(); // returns a number between 1 and 31 representing the day of the month
+        
+        const filteredData10mins = ogiotDatas.filter(
+          (ogiotDatas) => (new Date(ogiotDatas.date) >= tenMinsAgo)
+        );
+        setIotDatas(filteredData10mins);
       }
     }, [type, month_selection]);
+
+    function formatXAxis(tickItem) {
+      return moment(tickItem).fromNow()
+      }
   
     return(
         <div>
            <div>
               <select defaultValue="" onChange= {e =>setType(e.target.value)}>
-                <option value="">Select an option</option>
-                <option value="Live">Live</option>
+                <option value="Live">Select an option</option>
+                <option value="Live" >Live</option>
                 <option value="7_Days">Past 7 days</option>
                 <option value="Month" >Month</option>
+                <option value="All">All</option>
               </select>
             </div>
 
@@ -104,11 +121,11 @@ function Powerusagegraph (){
                     }}
                     >
                     <CartesianGrid strokeDasharray="1 " horizontal="true" vertical = ""/>
-                    <XAxis dataKey="current time" label={{ value: 'Time (hours)', position: 'insideBottom' }}/>
+                    <XAxis dataKey="date" tickFormatter={formatXAxis} label={{ value: 'Date', position: 'insideBottom' }}/>
                     <YAxis label={{ value: 'Power Usage (mWatts)', angle: -90, position: 'insideLeft' }}/>
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="stats.power_mW"  stroke="#8884d8" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="power_mW"  stroke="#8884d8" activeDot={{ r: 8 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>

@@ -1,4 +1,4 @@
-import { Chrome } from '@uiw/react-color';
+import { Slider, Sketch, Material, Colorful, Compact, Circle, Wheel, Block, Github, Chrome } from '@uiw/react-color';
 import { rgbaToHexa} from '@uiw/color-convert';
 import { db } from "../components/firebaseConfig/firebase";
 import { useState, useEffect } from "react";
@@ -67,7 +67,7 @@ function Controlspage() {
                             <div className="w-1 h-1">
                                 {pickerOpen ?
                                     <div className="absolute">
-                                        <Chrome style={{ marginTop: 15 }} color={hex} onChange={(color) => {
+                                        <Chrome style={{ zIndex:100, marginTop: 15 }} color={hex} onChange={(color) => {
                                             setRGB(color.rgb)
                                             setHex(color.hex);
                                         }} />
@@ -75,7 +75,9 @@ function Controlspage() {
                                             <button onClick={() => { setPickerOpen(false) }} className="w-1/2 bg-white shadow-xl p-1 border border-gray-300 hover:bg-gray-300">
                                                 Close
                                             </button>
-                                            <button onClick={() => { Push('iOT_1', device2) }} className="w-1/2 bg-white shadow-xl p-1 border border-gray-300 hover:bg-gray-300">
+                                            <button onClick={() => { 
+                                                setPickerOpen(false) 
+                                                Push('iOT_1', device2) }} className="w-1/2 bg-white shadow-xl p-1 border border-gray-300 hover:bg-gray-300">
                                                 Set
                                             </button>
                                         </div>

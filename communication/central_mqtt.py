@@ -34,7 +34,7 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
 
     if mode != "debug":
         now = datetime.datetime.now()
-        pathString = now.isoformat().replace('.',':')
+        pathString = now.isoformat().replace('.','T')
 
         logDict = {"date":now.isoformat(),**json.loads(message)}
         print(logDict)
