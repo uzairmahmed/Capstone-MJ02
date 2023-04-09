@@ -34,6 +34,9 @@ const char *topic = "iOT_1/logs";
 const char *topic2 = "iOT_1/control";
 const char *topic3 = "iOT_1/debug";
 
+WiFiClient espClient;
+PubSubClient client(espClient);
+
 void setup()
 {
     // Serial Init -----------------------------------------------
