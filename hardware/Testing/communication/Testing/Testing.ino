@@ -103,17 +103,10 @@ void callback(char *topic, byte *message, unsigned int length)
   }
 
   String color_val = internalobj["color"];
-  // Serial.println(color_val);
-  // int[] colors = [000,000,000];
-
-  char colorStr[13];
-  char *token;
-  char *rest = color_val.toCharArray(colorStr, color_val.length());
-
-  while ((token = strtok_r(rest, " ", &rest)))
-  {
-    printf("%s\n", token);
-  }
+  int rCol = color_val.substring(0, 3).toInt();
+  int gCol = color_val.substring(4, 7).toInt();
+  int bCol = color_val.substring(8, 11).toInt();
+  
 }
 void loop()
 {
