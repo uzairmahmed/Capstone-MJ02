@@ -35,33 +35,33 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
         pathString = now.isoformat().replace('.',':')
 
         logDict = {"date":now.isoformat(),**json.loads(message)}
-        db.reference('/' + device + '/' + mode + '/' + pathString).set(logDict)
+        # db.reference('/' + device + '/' + mode + '/' + pathString).set(logDict)
 
 # Firebase Listener Handlers
 def routerListener(event):
     # if event.type == 'put':
         if event.path != '/':
-            print('router/control', json.dumps({event.path:event.data}))
+            print('router (control)', json.dumps({event.path:event.data}))
             client.publish("router/control", json.dumps({event.path:event.data}))
 
 def device1Listener(event):
     # if event.type == 'put':
         if event.path != '/':
             print(event.data)
-            print('iOT_1/control', json.dumps({event.path:event.data}))
+            print('iOT_1 (control)', json.dumps({event.path:event.data}))
             client.publish("iOT_1/control", json.dumps({event.path:event.data}))
 
 def device2Listener(event):
     # if event.type == 'put':
         if event.path != '/':
             print(event.data)
-            print('iOT_2/control', json.dumps({event.path:event.data}))
+            print('iOT_2 (control)', json.dumps({event.path:event.data}))
             client.publish("iOT_2/control", json.dumps({event.path:event.data}))
 
 def device3Listener(event):
     # if event.type == 'put':
         if event.path != '/':
-            print('iOT_3/control', json.dumps({event.path:event.data}))
+            print('iOT_3 (control)', json.dumps({event.path:event.data}))
             client.publish("iOT_3/control", json.dumps({event.path:event.data}))
 
 

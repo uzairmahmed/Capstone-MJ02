@@ -72,39 +72,48 @@ void setup()
   client.publish(topic3, "Hello From ESP8266!");
   client.subscribe(topic2);
 }
-void callback(char *topic, byte *payload, unsigned int length)
+void callback(char *topic, byte *message, unsigned int length)
 {
   Serial.print("Message arrived in topic: ");
   Serial.println(topic);
   Serial.print("Message:");
-  const char *myString = ""; // String((char *) payload);
-  Serial.print(myString);
+
+  String messageTemp;
+
   for (int i = 0; i < length; i++)
   {
-    // This is where the command is recieved
-    Serial.print((char)payload[i]);
-    myString += ((char)payload[i]);
+    Serial.print((char)message[i]);
+    messageTemp += (char)message[i];
   }
-
-  const char *json = myString;
-  DynamicJsonDocument doc(1024);
-  deserializeJson(doc, json);
-
-  bool onOff = doc["/on_off"];
-  Serial.println("The value of /on_off is:");
-  Serial.println(onOff);
-
-  if (onOff)
-  {
-    Serial.print("\nPowering on");
-  }
-  else
-  {
-    Serial.print("\nPowering off");
-  }
-
   Serial.println();
-  Serial.println(" - - - - - - - - - - - -");
+
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, messageTemp);
+  JsonObject obj = doc.as<JsonObject>();
+  JsonObject internalobj = obj["/control"];
+
+  String on_off_val = internalobj["on_off"];
+  if (on_off_val == "true")
+  {
+    Serial.println("\nPowering on");
+  }
+  else if (on_off_val == "false")
+  {
+    Serial.println("\nPowering off");
+  }
+
+  String color_val = internalobj["color"];
+  // Serial.println(color_val);
+  // int[] colors = [000,000,000];
+
+  char colorStr[13];
+  char *token;
+  char *rest = color_val.toCharArray(colorStr, color_val.length());
+
+  while ((token = strtok_r(rest, " ", &rest)))
+  {
+    printf("%s\n", token);
+  }
 }
 void loop()
 {
@@ -112,7 +121,8 @@ void loop()
   client.loop();
 
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis > measurementinterval) {
+  if (currentMillis - previousMillis > measurementinterval)
+  {
     previousMillis = currentMillis;
     measureAndPublish();
   }

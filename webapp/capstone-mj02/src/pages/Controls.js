@@ -40,11 +40,14 @@ function Controlspage() {
 
     // Push Function
     async function Push (device, val) {
-        var col = (device !== 'iOT_1') ? [255, 255, 255] : [rgb.r, rgb.g, rgb.b]
+
+        var colString = (device !== 'iOT_1') ? 
+        "[255, 255, 255]" : 
+        "["+String(rgb.r).padStart(3)+","+String(rgb.g).padStart(3)+","+String(rgb.b).padStart(3)+"]"
 
         await update(ref(db, device + '/control'), {
             on_off: val,
-            color: col.toString()
+            color: colString
         });
     }
 
