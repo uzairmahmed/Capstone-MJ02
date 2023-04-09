@@ -8,83 +8,115 @@ function Networkstatisticspage (){
     var today = new Date().getDate();
     const [iotDatas, setIotDatas] = useState([]);
     const [ogNetworkDatas, setOgNetworkDatas] = useState([]);
-    const [month_selection , setMonth] = useState("");
-    const [type, setType] = useState();
-    const [average, setAverage] = useState();
-    const [counter, setCounter] = useState(0);
-    const [onDuration, setOnDuration] = useState();
-
+    const [client_selection , setClientSelection] = useState("");
+    const clientNames = [
+        "5E:B7:13:04:88:00",
+        "AC:12:03:D6:B6:0E",
+        "DC:A6:32:CC:53:7C"
+      ];
     useEffect(() =>{
       onValue(ref(db, 'router'+'/logs/'), snapshot => {
         const data=snapshot.val();
         if(data !== null){
           const values = Object.values(data);
           setOgNetworkDatas(values);
-          console.log(values);
+          console.log(values[values.length-1]['devices']['5E:B7:13:04:88:00']);
         }
+        
       });
     }, []);
+
+    useEffect(() => {
+        if (client_selection === "5E:B7:13:04:88:00"){
+            console.log("Device 1");
+        }
+        else if(client_selection === "AC:12:03:D6:B6:0E"){
+            console.log("Device 2");
+        }
+        else if(client_selection === "DC:A6:32:CC:53:7C"){
+            console.log("Device 3");
+        }
+    }, [client_selection]);
+    if(client_selection !==""){
+        console.log(ogNetworkDatas[ogNetworkDatas.length-1]['devices'][client_selection].authenticated);
+
+    }
     return(
-        <div className='w-full my-10'>
-            <div className='max-width-[1240px] mx-auto '>
-                
-                <div className='text-center'>
-                    <h2 className='text-5xl font-bold'>Network Statistics Page</h2>
-                    <p className='text-2xl py-10 text-gray-500'>Router Statistics</p>
-                </div>
-
-                <div className='grid gap-2 grid-cols-1 px-3 text-center md:grid-cols-4'>
-                        <Link to='/money_spent_on_power_graph'>
-                            <div className='rounded-xl shadow-xl border py-10'>
-                                <p className='font-bold text-indigo-500 text-4xl '>Network Bandwidth Usage</p>
-                                <p className='mt-2 text-gray-400'>Time x MBPS</p>
-                            </div>
-                        </Link>
-        
-
-                        <Link to='/power_usage_graph'>
-                            <div className='rounded-xl shadow-xl border py-10'>
-                                <p className='font-bold text-indigo-500 text-4xl '>Error Rate</p>
-                                <p className='mt-2 text-gray-400'>Time x Packets lost</p>
-                            </div>
-                        </Link>
-
-                            <div className='grid gap-2 grid-cols-1 px-3 text-center md:grid-cols-2'>
-                                <div className='rounded-xl shadow-xl border py-10'>
-                                    <p className='font-bold text-indigo-500 text-2xl '>Network Security</p>
-                                    <p className='mt-2 text-gray-400'></p>
-                                </div>
-                           
-                                <div className='rounded-xl shadow-xl border py-10'>
-                                    <p className='font-bold text-indigo-500 text-2xl '>Fire Wall Status</p>
-                                    <p className='mt-2 text-gray-400'></p>
-                                </div>
-                           
-                                <div className='rounded-xl shadow-xl border py-10'>
-                                    <p className='font-bold text-indigo-500 text-2xl '>Signal Strength</p>
-                                    <p className='mt-2 text-gray-400'></p>
-                                </div>
-                          
-                                <div className='rounded-xl shadow-xl border py-10'>
-                                    <p className='font-bold text-indigo-500 text-2xl '>Connection to Internet</p>
-                                    <p className='mt-2 text-gray-400'></p>
-                                </div>
-                            
-                                <div className='rounded-xl shadow-xl border py-10'>
-                                    <p className='font-bold text-indigo-500 text-2xl '>Network Health</p>
-                                    <p className='mt-2 text-gray-400'></p>
-                                </div>
-                       
-                                <div className='rounded-xl shadow-xl border py-10'>
-                                    <p className='font-bold text-indigo-500 text-2xl '>Connected Devices</p>
-                                    <p className='mt-2 text-gray-400'></p>
-                                </div>
-                        </div>     
-                </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+             <div>
+              <select defaultValue="" onChange= {e =>setClientSelection(e.target.value)}>
+                <option value="">Select an option</option>
+                <option value="5E:B7:13:04:88:00">Device 1 (5E:B7:13:04:88:00)</option>
+                <option value="AC:12:03:D6:B6:0E">Device 2 (AC:12:03:D6:B6:0E)</option>
+                <option value="DC:A6:32:CC:53:7C" >Device 3 (DC:A6:32:CC:53:7C)</option>
+              </select>
             </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Network Bandwidth Usage</h2>
+          {client_selection !== "" && <p className="text-gray-600">2.4 GHz</p>}
         </div>
-
-        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Error Packets</h2>
+          {client_selection !== "" && (
+            <p className="text-gray-600">
+              {ogNetworkDatas[ogNetworkDatas.length - 1]["devices"][client_selection]["tx failed"]}
+            </p>
+          )}
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Authenticated</h2>
+          {client_selection !== "" && (
+            <p className="text-gray-600">
+              {ogNetworkDatas[ogNetworkDatas.length - 1]["devices"][client_selection].authenticated === "yes" ? "True" : "False"}
+            </p>
+          )}
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Rx bitrate</h2>
+          {client_selection !== "" && (
+            <p className="text-gray-600">
+              {ogNetworkDatas[ogNetworkDatas.length - 1]["devices"][client_selection]["rx bitrate"].replace("SLASH", "/")}
+            </p>
+          )}
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Tx bitrate</h2>
+          {client_selection !== "" && (
+            <p className="text-gray-600">
+              {ogNetworkDatas[ogNetworkDatas.length - 1]["devices"][client_selection]["tx bitrate"].replace("SLASH", "/")}
+            </p>
+          )}
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Authorized</h2>
+          {client_selection !== "" && (
+            <p className="text-gray-600">
+              {ogNetworkDatas[ogNetworkDatas.length - 1]["devices"][client_selection].authorized === "yes" ? "True" : ""}
+            </p>
+          )}
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Connected Time</h2>
+          {client_selection !== "" && (
+            <p className="text-gray-600">{ogNetworkDatas[ogNetworkDatas.length - 1]["devices"][client_selection]["connected time"]}</p>
+          )}
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">Connected Devices</h2>
+          {client_selection !== "" && (
+            <ul className="text-gray-600">
+              <li>Device 1 (5E:B7:13:04:88:00): Connected</li>
+              <li>Device 2 (AC:12:03:D6:B6:0E): Connected</li>
+              <li>Device 2 (AC:12:03:D6:B6:0E): Connected</li>
+            </ul>)}
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-lg font-semibold mb-4">idk man </h2>
+          {client_selection !== "" && (
+            <p className="text-gray-600">{ogNetworkDatas[ogNetworkDatas.length - 1]["devices"][client_selection]["connected time"]}</p>
+          )}
+        </div>
+        </div> 
     );
 }
 

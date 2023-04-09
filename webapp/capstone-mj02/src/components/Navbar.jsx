@@ -25,6 +25,10 @@ export const Navbar = () => {
                     <li className='px-3'> 
                         <Link to='/controls'>Controls</Link> 
                     </li>
+
+                    <li className='px-3'> 
+                        <Link>Network Admin</Link> 
+                    </li>
                 </ul>
             </div>
 

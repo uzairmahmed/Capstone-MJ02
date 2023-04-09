@@ -9,6 +9,7 @@ function Moneyspentonpowergraph (){
     const [month_selection , setMonth] = useState("");
     const [type, setType] = useState();
     const [average, setAverage] = useState(0);
+    const constant_money = 0.00000000090833;
     const monthNames = [
       "January",
       "February",
@@ -45,7 +46,7 @@ function Moneyspentonpowergraph (){
         for (let i = 0; i < filteredData.length; i++) {
           average_money_spent += filteredData[i].stats.power_mW;
         } 
-        average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60*30); //30 must be replaced by the number of days per month!
+        average_money_spent = (average_money_spent*constant_money)/(24*60*60*30); //30 must be replaced by the number of days per month!
         setAverage(average_money_spent);
 
         setIotDatas(filteredData);
@@ -66,7 +67,7 @@ function Moneyspentonpowergraph (){
         for (let i = 0; i < filteredPoints.length; i++) {
           average_money_spent += filteredPoints[i].stats.power_mW;
         } 
-        average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60);
+        average_money_spent = (average_money_spent*constant_money)/(24*60*60);
         setAverage(average_money_spent);
         setIotDatas(filteredDataToday);
       } else if (type === "7_Days"){
@@ -84,7 +85,7 @@ function Moneyspentonpowergraph (){
         for (let i = 0; i < filteredData7days.length; i++) {
           average_money_spent += filteredData7days[i].stats.power_mW;
         } 
-        average_money_spent = (average_money_spent*0.0000000090833)/(24*60*60*7); // 7 reps, last 7 days! 
+        average_money_spent = (average_money_spent*constant_money)/(24*60*60*7); // 7 reps, last 7 days! 
         setAverage(average_money_spent);
         setIotDatas(filteredData7days);
       }
@@ -143,6 +144,7 @@ function Moneyspentonpowergraph (){
                     <Tooltip />
                     <Legend />
                     <Line type="monotone" dataKey="stats.power_mW"  stroke="#8884d8" activeDot={{ r: 8 }} />
+                    <Line type="linear" dataKey="stats.power_mW" stroke="#EE4B2B" dot={false} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
