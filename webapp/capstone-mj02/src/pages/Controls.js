@@ -43,7 +43,7 @@ function Controlspage() {
 
         var colString = (device !== 'iOT_1') ? 
         "[255, 255, 255]" : 
-        "["+String(rgb.r).padStart(3)+","+String(rgb.g).padStart(3)+","+String(rgb.b).padStart(3)+"]"
+        String(rgb.r).padStart(3,0)+","+String(rgb.g).padStart(3,0)+","+String(rgb.b).padStart(3,0)
 
         await update(ref(db, device + '/control'), {
             on_off: val,
