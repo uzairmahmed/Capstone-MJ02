@@ -15,6 +15,9 @@ const int relay = 15;
 
 const int resolution = 256;
 
+unsigned long previousMillis = 0;
+unsigned long measurementinterval = 60000;
+
 // WiFi
 // const char *ssid = "NW Coextro WIFI"; // Enter your WiFi name
 // const char *password = "wycik96now";  // Enter WiFi password
@@ -27,9 +30,9 @@ const char *password = "capstoneMJ02"; // Enter WiFi password
 const char *mqtt_broker = "192.168.1.143"; // Enter your WiFi or Ethernet IP
 const int mqtt_port = 1883;
 
-const char *topic = "iOT_1/logs";
-const char *topic2 = "iOT_1/control";
-const char *topic3 = "iOT_1/debug";
+const char *topic = "iOT_2/logs";
+const char *topic2 = "iOT_2/control";
+const char *topic3 = "iOT_2/debug";
 
 void setup()
 {
@@ -123,10 +126,12 @@ void callback(char *topic, byte *message, unsigned int length)
         if (on_off_val == "true")
         {
             Serial.println("\nPowering on");
+            digitalWrite(relay, LOW);
         }
         else if (on_off_val == "false")
         {
             Serial.println("\nPowering off");
+            digitalWrite(relay, HIGH);
         }
     }
 
@@ -165,5 +170,17 @@ void measureAndPublish()
     sprintf(buffer, "{\"current_mA\": %.2f, \"loadvoltage\": %.2f, \"power_mW\": %.2f}", current_mA, loadvoltage, power_mW);
     Serial.println(buffer);
     client.publish(topic, buffer);
-    delay(10000);
+}
+
+void loop()
+{
+
+  client.loop();
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis > measurementinterval)
+  {
+    previousMillis = currentMillis;
+    measureAndPublish();
+  }
 }
