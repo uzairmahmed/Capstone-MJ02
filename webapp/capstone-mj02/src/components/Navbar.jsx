@@ -27,7 +27,7 @@ export const Navbar = () => {
                     </li>
 
                     <li className='px-3'> 
-                        <Link>Network Admin</Link> 
+                        <a href= 'http://192.168.1.1'target='_blank'>Network Admin</a> 
                     </li>
                 </ul>
             </div>
