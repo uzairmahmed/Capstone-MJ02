@@ -5,6 +5,7 @@ import { getDatabase, ref, onValue, set, orderByChild, startAt, endAt, query} fr
 import moment from 'moment';
 
 function Powerusagegraph (){
+  const [device, setDevice] = useState();
     const [iotData, setIotData] = useState("");
     const [iotDatas, setIotDatas] = useState([]);
     const [ogiotDatas, setOgIotDatas] = useState([]);
@@ -25,16 +26,17 @@ function Powerusagegraph (){
       "December",
     ];
     //read
-    useEffect(() =>{
-      onValue(ref(db, 'iOT_2'+'/logs/'), snapshot => {
-        const data=snapshot.val();
-        if(data !== null){
-          const values = Object.values(data);
-          console.log(data)
-          setOgIotDatas(values);
-        }
-      });
-    }, []);
+    useEffect(() => {
+      if (device) {
+        onValue(ref(db, device + "/logs/"), (snapshot) => {
+          const data = snapshot.val();
+          if (data !== null) {
+            const values = Object.values(data);
+            setOgIotDatas(values);
+          }
+        });
+      }
+    }, [device]);
 
     useEffect(() => {
       // console.log(new Date(ogiotDatas[0].date).toLocaleString('default', {month:'long'}))
@@ -68,42 +70,56 @@ function Powerusagegraph (){
         );
         setIotDatas(filteredData10mins);
       }
-    }, [type, month_selection]);
+    }, [type, month_selection, device, ogiotDatas]);
 
     function formatXAxis(tickItem) {
       return moment(tickItem).fromNow()
       }
   
     return(
-        <div>
-           <div>
-              <select defaultValue="" onChange= {e =>setType(e.target.value)}>
-                <option value="Live">Select an option</option>
-                <option value="Live" >Live</option>
-                <option value="7_Days">Past 7 days</option>
-                <option value="Month" >Month</option>
-                <option value="All">All</option>
-              </select>
-            </div>
+      <div>
+      <div>
+        <select defaultValue="" onChange={(e) => setDevice(e.target.value)}>
+          <option value="">Select Device</option>
+          <option value="iOT_1">iOT_1</option>
+          <option value="iOT_2">iOT_2</option>
+          <option value="iOT_3">iOT_3</option>
+        </select>
+      </div>
 
-            {type === "Month" && (<div>
-              <h1>{month_selection} </h1>
-              <select defaultValue="" onChange= {e =>setMonth(e.target.value)}>
-                <option value="">Select a month</option>
-                <option value="January" defaultValue>January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-              </select>
-            </div>)}
+      {device && (
+        <div>
+          <select defaultValue="" onChange={(e) => setType(e.target.value)}>
+            <option value="Live">Select an option</option>
+            <option value="Today">Today</option>
+            <option value="7_Days">Past 7 days</option>
+            <option value="Month">Month</option>
+            <option value="All">All</option>
+          </select>
+        </div>
+      )}
+
+      {type === "Month" && (
+        <div>
+          <select defaultValue="" onChange={(e) => setMonth(e.target.value)}>
+            <option value="">Select a month</option>
+            <option value="January" defaultValue>
+              January
+            </option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+          </select>
+        </div>
+      )}
 
 
             <div className="py-5">

@@ -20,7 +20,7 @@ function Moneyspentonpowergraph() {
   const [month_selection, setMonth] = useState("");
   const [type, setType] = useState();
   const [average, setAverage] = useState(0);
-  const constant_money = 0.00000000090833;
+  const constant_money = 0.00000000181666667;
   const monthNames = [
     "January",
     "February",
@@ -51,6 +51,7 @@ function Moneyspentonpowergraph() {
   
 
   useEffect(() => {
+
     // console.log(new Date(ogiotDatas[0].date).toLocaleString('default', {month:'long'}))
     if (type === "Month") {
       setAverage(0);
@@ -103,7 +104,6 @@ function Moneyspentonpowergraph() {
       setAverage(0);
       const now = moment();
       const startOfDay = now.startOf("day");
-      console.log(startOfDay);
       const filteredDataToday = ogiotDatas.filter((ogiotData) =>
         moment(ogiotData.date).isSameOrAfter(startOfDay)
       );
@@ -115,12 +115,12 @@ function Moneyspentonpowergraph() {
       setAverage(average_money_spent);
       setIotDatas(filteredDataToday);
     }
-  }, [type, month_selection]);
+  }, [type, month_selection, device, ogiotDatas]);
 
   function formatXAxis(tickItem) {
     return moment(tickItem).fromNow();
   }
-  
+
   return (
     <div>
       <div>
@@ -132,15 +132,17 @@ function Moneyspentonpowergraph() {
         </select>
       </div>
 
-      <div>
-        <select defaultValue="" onChange={(e) => setType(e.target.value)}>
-          <option value="Live">Select an option</option>
-          <option value="Today">Today</option>
-          <option value="7_Days">Past 7 days</option>
-          <option value="Month">Month</option>
-          <option value="All">All</option>
-        </select>
-      </div>
+      {device && (
+        <div>
+          <select defaultValue="" onChange={(e) => setType(e.target.value)}>
+            <option value="Live">Select an option</option>
+            <option value="Today">Today</option>
+            <option value="7_Days">Past 7 days</option>
+            <option value="Month">Month</option>
+            <option value="All">All</option>
+          </select>
+        </div>
+      )}
 
       {type === "Month" && (
         <div>
@@ -163,8 +165,6 @@ function Moneyspentonpowergraph() {
           </select>
         </div>
       )}
-
-
 
       <div className="py-5">
         <h1 className="text-4xl text-center">Money Spent on Power</h1>
