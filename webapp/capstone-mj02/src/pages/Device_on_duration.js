@@ -2,6 +2,7 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, L
 import {db} from "../components/firebaseConfig/firebase";
 import {useState, useEffect} from "react";
 import {ref, onValue} from "firebase/database";
+import moment from 'moment';
   
 function Deviceonduration (){
     var today = new Date().getDate();
@@ -85,37 +86,37 @@ function Deviceonduration (){
     const [onDurationSevenDays, setOnDurationSevenDays] = useState([
       {
         day: 1,
-        device_on_duration: 40,
+        device_on_duration: 0,
         
       },
       {
         day: 2,
-        device_on_duration: 50,
+        device_on_duration: 0,
         
       },
       {
         day: 3,
-        device_on_duration: 70,
+        device_on_duration: 0,
         
       },
       {
         day: 4,
-        device_on_duration: 45,
+        device_on_duration: 0,
         
       },
       {
         day: 5,
-        device_on_duration: 45,
+        device_on_duration: 0,
         
       },
       {
         day: 6,
-        device_on_duration: 45,
+        device_on_duration: 0,
         
       },
       {
         day: 7,
-        device_on_duration: 45,
+        device_on_duration: 0,
         
       }
       ]);
@@ -153,70 +154,97 @@ function Deviceonduration (){
     useEffect(() => {
       if (type === "Month") {
         for (let i = 0; i < ogiotDatas.length; i++) { 
-          ogiotDatas[i].stats.power_mW = 30; //each point is 30 seconds!
+          ogiotDatas[i].power_mW = 1; //each point is 1 minute!
         } 
 
         for (let i = 0; i < monthNames.length; i++) {
           const months = monthNames[i];
+          
           const filteredData = ogiotDatas.filter(
-            (ogiotDatas) => ogiotDatas.month === months
+            (ogiotDatas) => new Date(ogiotDatas.date).toLocaleString('default', {month:'long'}) === monthNames[i]
           );
 
+          setIotDatas(filteredData);
+
           for (let i = 0; i < filteredData.length; i++) {
-            on_duration += filteredData[i].stats.power_mW;
+            on_duration += filteredData[i].power_mW;
           }
           const Index = onDurationMonths.findIndex((month) => month.month === months);
           const updatedOnDurationMonths = [...onDurationMonths];
-          updatedOnDurationMonths[Index].device_on_duration = on_duration/60;
+          updatedOnDurationMonths[Index].device_on_duration = on_duration;
           setOnDurationMonths(updatedOnDurationMonths);
 
           on_duration = 0;
         }
        
       } else if(type === "Today") {
-        const now = new Date();
-        const today = now.getDate();
-        const currentMonthName = monthNames[now.getMonth()]; // get the name of the current month
-
-        const filteredDataToday = ogiotDatas.filter(
-          (ogiotDatas) => (ogiotDatas.month === currentMonthName && parseInt(ogiotDatas.day.padStart(2, '0')) === today)
+        // const now = new Date();
+        // const today = now.getDate();
+        // const currentMonthName = monthNames[now.getMonth()]; // get the name of the current month
+        
+        // const filteredDataToday = ogiotDatas.filter(
+        //   (ogiotDatas) => (ogiotDatas.month === currentMonthName && parseInt(ogiotDatas.day.padStart(2, '0')) === today)
+        // );
+        const now = moment();
+        const startOfDay = now.startOf("day");
+        console.log(startOfDay);
+        const filteredDataToday = ogiotDatas.filter((ogiotData) =>
+          moment(ogiotData.date).isSameOrAfter(startOfDay)
         );
-        const filteredPoints = filteredDataToday.filter(dataPoint => dataPoint.stats.power_mW > 0);
+        const filteredPoints = filteredDataToday.filter(dataPoint => dataPoint.power_mW > 0);
         for (let i = 0; i < ogiotDatas.length; i++) { 
-          ogiotDatas[i].stats.power_mW = 30; //each duration is 30 sec
-        } //note, we need it for 24 hrs! AND, each point is taken every 30 seconds
-
-        for (let i = 0; i < filteredPoints.length; i++) {
-          on_duration += filteredPoints[i].stats.power_mW;
+          ogiotDatas[i].power_mW = 1; //each point is 1 minute!
         } 
 
-        setOnDurationToday([{ today: new Date().toLocaleDateString(), device_on_duration: (on_duration/60) }, ...onDurationToday.slice(1)]);
+        for (let i = 0; i < filteredPoints.length; i++) {
+          on_duration += filteredPoints[i].power_mW;
+        } 
+
+        setOnDurationToday([{ today: new Date().toLocaleDateString(), device_on_duration: (on_duration) }, ...onDurationToday.slice(1)]);
         setIotDatas(ogiotDatas);
         on_duration = 0;
         setOnDuration(0);
       
       } else if (type === "7_Days"){
-      for (let i = 0; i < ogiotDatas.length; i++) { 
-        ogiotDatas[i].stats.power_mW = 30; 
-      } 
+        for (let i = 0; i < ogiotDatas.length; i++) { 
+          ogiotDatas[i].power_mW = 1; //each point is 1 minute!
+        } 
        
       for (let i = 1; i < 8; i++) {
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         const sevenDaysAgoMonth = sevenDaysAgo.getMonth(); // returns a number between 0 and 11 representing the month (0 = January, 1 = February, etc.)
         const sevenDaysAgoDate = sevenDaysAgo.getDate(); // returns a number between 1 and 31 representing the day of the month
-        const currentMonthName = monthNames[sevenDaysAgoMonth];
         
+        let DAYSDIFFERENCE = 0;
         const filteredData7days = ogiotDatas.filter(
-          (ogiotDatas) => (ogiotDatas.month === currentMonthName && ogiotDatas.day >= sevenDaysAgoDate)
-        );
+          (ogiotDatas) =>
+          { 
+            const date = new Date(ogiotDatas.date);
+            const timeDiff = now.getTime() - date.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            DAYSDIFFERENCE = daysDiff;
+          return (new Date(ogiotDatas.date).getMonth() === sevenDaysAgoMonth && new Date(ogiotDatas.date).getDate() >= sevenDaysAgoDate)
+          }
+          );
+
+          /*
+            const filteredData7days = ogiotDatas.filter(
+              (ogiotDatas) => {
+                const date = new Date(ogiotDatas.date);
+                const timeDiff = now.getTime() - date.getTime();
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                return (date.getMonth() === sevenDaysAgoMonth && date.getDate() >= sevenDaysAgoDate && daysDiff <= 7);
+              }
+            );
+          */
 
         for (let i = 0; i < filteredData7days.length; i++) {
-          on_duration += filteredData7days[i].stats.power_mW;
+          on_duration += filteredData7days[i].power_mW;
         }
-        const Index = onDurationSevenDays.findIndex((day) => day.day === i);
+        const Index = onDurationSevenDays.findIndex((day) => day.day === DAYSDIFFERENCE);
         const updatedOnDurationSevenDays = [...onDurationSevenDays];
-        updatedOnDurationSevenDays[Index].device_on_duration = (on_duration/60);
+        updatedOnDurationSevenDays[Index].device_on_duration = (on_duration);
         setOnDurationSevenDays(updatedOnDurationSevenDays);
         on_duration = 0;
       }
@@ -230,7 +258,7 @@ function Deviceonduration (){
                 <option value="">Select an option</option>
                 <option value="Today">Today</option>
                 <option value="7_Days">Past 7 days</option>
-                <option value="Month" >Month</option>
+                <option value="Month" >Months</option>
               </select>
             </div>
 
@@ -247,10 +275,10 @@ function Deviceonduration (){
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                   <BarChart width={730} height={250} data={onDurationToday}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="today" />
+                    <XAxis dataKey="today" label={{ value: "Today", position: "insideBottom", dy: 10}}/>
                     <YAxis />
                     <Tooltip />
-                    <Legend />
+                    <Legend verticalAlign="top" height={30}/>
                     <Bar dataKey="device_on_duration" fill="#8884d8" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -260,10 +288,10 @@ function Deviceonduration (){
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                   <BarChart width={730} height={250} data={onDurationMonths}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
+                    <XAxis dataKey="month" label={{ value: "Months", position: "insideBottom", dy: 10 }} />
                     <YAxis />
                     <Tooltip />
-                    <Legend />
+                    <Legend verticalAlign="top" height={30}/>
                     <Bar dataKey="device_on_duration" fill="#8884d8" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -273,10 +301,10 @@ function Deviceonduration (){
                 <ResponsiveContainer className="py-5" width="100%" aspect={3}>
                   <BarChart width={730} height={250} data={onDurationSevenDays}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
+                    <XAxis dataKey="day" label={{ value: "Day(s) ago", position: "insideBottom", dy: 7 }}/>
                     <YAxis />
                     <Tooltip />
-                    <Legend />
+                    <Legend verticalAlign="top" height={30}/>
                     <Bar dataKey="device_on_duration" fill="#8884d8" />
                   </BarChart>
                 </ResponsiveContainer>
