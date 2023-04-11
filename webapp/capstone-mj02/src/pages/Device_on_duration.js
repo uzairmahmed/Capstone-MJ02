@@ -1,6 +1,4 @@
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   XAxis,
@@ -181,16 +179,8 @@ function Deviceonduration() {
         on_duration = 0;
       }
     } else if (type === "Today") {
-      // const now = new Date();
-      // const today = now.getDate();
-      // const currentMonthName = monthNames[now.getMonth()]; // get the name of the current month
-
-      // const filteredDataToday = ogiotDatas.filter(
-      //   (ogiotDatas) => (ogiotDatas.month === currentMonthName && parseInt(ogiotDatas.day.padStart(2, '0')) === today)
-      // );
       const now = moment();
       const startOfDay = now.startOf("day");
-      console.log(startOfDay);
       const filteredDataToday = ogiotDatas.filter((ogiotData) =>
         moment(ogiotData.date).isSameOrAfter(startOfDay)
       );
@@ -238,17 +228,6 @@ function Deviceonduration() {
           );
         });
 
-        /*
-            const filteredData7days = ogiotDatas.filter(
-              (ogiotDatas) => {
-                const date = new Date(ogiotDatas.date);
-                const timeDiff = now.getTime() - date.getTime();
-                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                return (date.getMonth() === sevenDaysAgoMonth && date.getDate() >= sevenDaysAgoDate && daysDiff <= 7);
-              }
-            );
-          */
-
         for (let i = 0; i < filteredData7days.length; i++) {
           on_duration += filteredData7days[i].power_mW;
         }
@@ -265,8 +244,8 @@ function Deviceonduration() {
 
   return (
     <div>
-      <div>
-        <select defaultValue="" onChange={(e) => setDevice(e.target.value)}>
+      <div class="flex ">
+        <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-5 ml-2" defaultValue="" onChange={(e) => setDevice(e.target.value)}>
           <option value="">Select Device</option>
           <option value="iOT_1">iOT_1</option>
           <option value="iOT_2">iOT_2</option>
@@ -274,8 +253,8 @@ function Deviceonduration() {
         </select>
       </div>
       {device && (
-        <div>
-          <select defaultValue="" onChange={(e) => setType(e.target.value)}>
+        <div class="flex mt-4">
+          <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 ml-2" defaultValue="" onChange={(e) => setType(e.target.value)}>
             <option value="">Select an option</option>
             <option value="Today">Today</option>
             <option value="7_Days">Past 7 days</option>
@@ -283,6 +262,7 @@ function Deviceonduration() {
           </select>
         </div>
       )}
+
 
       <div className="py-5">
         <h1 className="text-3xl text-center">Device On Duration</h1>

@@ -11,38 +11,17 @@ import {
 import { db } from "../components/firebaseConfig/firebase";
 import { useState, useEffect } from "react";
 import {
-  getDatabase,
   ref,
   onValue,
-  set,
-  orderByChild,
-  startAt,
-  endAt,
-  query,
 } from "firebase/database";
 import moment from "moment";
 
 function Powerusagegraph() {
   const [device, setDevice] = useState();
-  const [iotData, setIotData] = useState("");
   const [iotDatas, setIotDatas] = useState([]);
   const [ogiotDatas, setOgIotDatas] = useState([]);
   const [month_selection, setMonth] = useState("January");
   const [type, setType] = useState();
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
   //read
   useEffect(() => {
     if (device) {
@@ -57,7 +36,6 @@ function Powerusagegraph() {
   }, [device]);
 
   useEffect(() => {
-    // console.log(new Date(ogiotDatas[0].date).toLocaleString('default', {month:'long'}))
     if (type === "Month") {
       const filteredData = ogiotDatas.filter(
         (ogiotDatas) =>
@@ -84,8 +62,6 @@ function Powerusagegraph() {
       //two mins ago
       const now = new Date();
       const tenMinsAgo = new Date(now.getTime() - 2 * 60 * 1000);
-      const tenMinsAgoMonth = tenMinsAgo.getMonth(); // returns a number between 0 and 11 representing the month (0 = January, 1 = February, etc.)
-      const tenMinsAgoDate = tenMinsAgo.getDate(); // returns a number between 1 and 31 representing the day of the month
 
       const filteredData10mins = ogiotDatas.filter(
         (ogiotDatas) => new Date(ogiotDatas.date) >= tenMinsAgo
@@ -101,7 +77,7 @@ function Powerusagegraph() {
   return (
     <div>
       <div>
-        <select defaultValue="" onChange={(e) => setDevice(e.target.value)}>
+        <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-5 ml-2" defaultValue="" onChange={(e) => setDevice(e.target.value)}>
           <option value="">Select Device</option>
           <option value="iOT_1">iOT_1</option>
           <option value="iOT_2">iOT_2</option>
@@ -111,7 +87,7 @@ function Powerusagegraph() {
 
       {device && (
         <div>
-          <select defaultValue="" onChange={(e) => setType(e.target.value)}>
+          <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-2 ml-2" defaultValue="" onChange={(e) => setType(e.target.value)}>
             <option value="Live">Select an option</option>
             <option value="Today">Today</option>
             <option value="7_Days">Past 7 days</option>
@@ -123,7 +99,7 @@ function Powerusagegraph() {
 
       {type === "Month" && (
         <div>
-          <select defaultValue="" onChange={(e) => setMonth(e.target.value)}>
+          <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-2 ml-2" defaultValue="" onChange={(e) => setMonth(e.target.value)}>
             <option value="">Select a month</option>
             <option value="January" defaultValue>
               January
@@ -161,7 +137,7 @@ function Powerusagegraph() {
             <XAxis
               dataKey="date"
               tickFormatter={formatXAxis}
-              label={{ value: "Date", position: "insideBottom" }}
+              label={{ value: "Date", position: "insideBottom", dy: 10 }}
             />
             <YAxis
               label={{
@@ -171,12 +147,13 @@ function Powerusagegraph() {
               }}
             />
             <Tooltip />
-            <Legend />
+            <Legend verticalAlign="top" height={30} />
             <Line
               type="monotone"
               dataKey="power_mW"
               stroke="#8884d8"
               activeDot={{ r: 8 }}
+              dot={false}
             />
           </LineChart>
         </ResponsiveContainer>

@@ -21,20 +21,6 @@ function Moneyspentonpowergraph() {
   const [type, setType] = useState();
   const [average, setAverage] = useState(0);
   const constant_money = 0.00000000181666667;
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
   let average_money_spent = 0;
 
   useEffect(() => {
@@ -51,8 +37,6 @@ function Moneyspentonpowergraph() {
   
 
   useEffect(() => {
-
-    // console.log(new Date(ogiotDatas[0].date).toLocaleString('default', {month:'long'}))
     if (type === "Month") {
       setAverage(0);
       const filteredData = ogiotDatas.filter(
@@ -124,7 +108,7 @@ function Moneyspentonpowergraph() {
   return (
     <div>
       <div>
-        <select defaultValue="" onChange={(e) => setDevice(e.target.value)}>
+        <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-5 ml-2" defaultValue="" onChange={(e) => setDevice(e.target.value)}>
           <option value="">Select Device</option>
           <option value="iOT_1">iOT_1</option>
           <option value="iOT_2">iOT_2</option>
@@ -134,7 +118,7 @@ function Moneyspentonpowergraph() {
 
       {device && (
         <div>
-          <select defaultValue="" onChange={(e) => setType(e.target.value)}>
+          <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-2 ml-2" defaultValue="" onChange={(e) => setType(e.target.value)}>
             <option value="Live">Select an option</option>
             <option value="Today">Today</option>
             <option value="7_Days">Past 7 days</option>
@@ -146,7 +130,7 @@ function Moneyspentonpowergraph() {
 
       {type === "Month" && (
         <div>
-          <select defaultValue="" onChange={(e) => setMonth(e.target.value)}>
+          <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-2 ml-2" defaultValue="" onChange={(e) => setMonth(e.target.value)}>
             <option value="">Select a month</option>
             <option value="January" defaultValue>
               January
@@ -184,7 +168,7 @@ function Moneyspentonpowergraph() {
             <XAxis
               dataKey="date"
               tickFormatter={formatXAxis}
-              label={{ value: "Date", position: "insideBottom" }}
+              label={{ value: "Date", position: "insideBottom", dy: 10}}
             />
             <YAxis
               label={{
@@ -194,12 +178,13 @@ function Moneyspentonpowergraph() {
               }}
             />
             <Tooltip />
-            <Legend />
+            <Legend verticalAlign="top" height={30} />
             <Line
               type="monotone"
               dataKey="power_mW"
               stroke="#8884d8"
-              activeDot={{ r: 8 }}
+              activeDot={{ r: 5 }}
+              dot={false}
             />
           </LineChart>
         </ResponsiveContainer>
