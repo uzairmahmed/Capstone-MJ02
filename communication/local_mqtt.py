@@ -41,14 +41,14 @@ def on_message(client, userdata, msg):  # The callback for when a PUBLISH
 
 
 def getOSValues():
-    threading.Timer(300.0, getOSValues).start()
-    
+    threading.Timer(10.0, getOSValues).start()
+    print('running')
     total_CPUs = psutil.cpu_count(),
     avg_loads = [x / psutil.cpu_count() * 100 for x in psutil.getloadavg()]
 
-    collector_command = ['service', 'firebase_collector', 'status']
-    server_command = ['service', 'react_server', 'status']
-    kiosk_command = ['service', 'kiosk', 'status']
+    # collector_command = ['service', 'firebase_collector', 'status']
+    # server_command = ['service', 'react_server', 'status']
+    # kiosk_command = ['service', 'kiosk', 'status']
 
     vals = {
         "total_memory": psutil.virtual_memory().total,
@@ -58,15 +58,17 @@ def getOSValues():
         "total_disk": psutil.disk_usage('/').total,
         "used_disk": psutil.disk_usage('/').used,
         "avg_load_1_min": avg_loads[0],
-        "firebase_collector": not bool (subprocess.call(collector_command, stdout = subprocess.PIPE)),
-        "react_server": not bool (subprocess.call(server_command, stdout = subprocess.PIPE)),
-        "kiosk_display": not bool (subprocess.call(kiosk_command, stdout = subprocess.PIPE)),
+        # "firebase_collector": not bool (subprocess.call(collector_command, stdout = subprocess.PIPE)),
+        # "react_server": not bool (subprocess.call(server_command, stdout = subprocess.PIPE)),
+        # "kiosk_display": not bool (subprocess.call(kiosk_command, stdout = subprocess.PIPE)),
     }
-    
+
+    send_values_over_mqtt(vals)
+
     return vals
 
 def send_values_over_mqtt(vals):
-    mqttc = mqtt.Client("router_node")
+    mqttc = mqtt.Client("laptop_node")
     mqttc.connect("192.168.1.143", 1883) 
     
     mqttc.publish("laptop/logs", json.dumps(vals))
@@ -76,20 +78,20 @@ def main():
     client.on_message = on_message 
     client.connect('192.168.1.143', 1883)
     client.subscribe([
-        ("router/logs",   1),
-        ("central/logs",  1),
-        ("iOT_1/logs",    1),
-        ("iOT_2/logs",    1),
+        # ("router/logs",   1),
+        # ("central/logs",  1),
+        # ("iOT_1/logs",    1),
+        # ("iOT_2/logs",    1),
         ("laptop/logs",   1),
-        ("iOT_1/control", 1),
-        ("iOT_2/control", 1),
-        ("iOT_1/debug",   1),
-        ("iOT_2/debug",   1),
+        # ("iOT_1/control", 1),
+        # ("iOT_2/control", 1),
+        # ("iOT_1/debug",   1),
+        # ("iOT_2/debug",   1),
     ])
     osValues = getOSValues()
-    logDict = {**osValues}
+    # logDict = {**osValues}
+    # send_values_over_mqtt(logDict)
 
-    send_values_over_mqtt(logDict)
     client.loop_forever()
 
 if __name__ == '__main__':

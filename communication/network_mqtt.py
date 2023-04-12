@@ -59,7 +59,7 @@ def parse_connected_clients(listed, addresses):
     return jsonList
 
 def getOSValues():
-    threading.Timer(60.0, getOSValues).start()
+    # threading.Timer(60.0, getOSValues).start()
     
     total_CPUs = psutil.cpu_count(),
     avg_loads = [x / psutil.cpu_count() * 100 for x in psutil.getloadavg()]
@@ -75,6 +75,16 @@ def getOSValues():
         "network_logging": True,
     }
 
+    listed = list_connected_clients()
+    addresses = get_hosts()
+    connected_devices = parse_connected_clients(listed, addresses)
+
+    logDict = {
+      **vals,
+      "devices": connected_devices
+      }
+    
+    send_values_over_mqtt(logDict)
     return vals
 
 def send_values_over_mqtt(vals):
@@ -84,17 +94,12 @@ def send_values_over_mqtt(vals):
     mqttc.publish("router/logs", json.dumps(vals))
 
 def main():  # Create instance of client with client ID “digi_mqtt_test”
-    listed = list_connected_clients()
-    addresses = get_hosts()
-    connected_devices = parse_connected_clients(listed, addresses)
-    osValues = getOSValues()
-    logDict = {
-      **osValues,
-      "devices": connected_devices
-      }
-    print(logDict)
 
-    send_values_over_mqtt(logDict)
+    osValues = getOSValues()
+    
+    # print(logDict)
+
+    # send_values_over_mqtt(logDict)
 
 if __name__ == '__main__':
     main()
