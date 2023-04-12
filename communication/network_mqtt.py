@@ -59,7 +59,7 @@ def parse_connected_clients(listed, addresses):
     return jsonList
 
 def getOSValues():
-    threading.Timer(60.0, getOSValues).start()
+    # threading.Timer(60.0, getOSValues).start()
     
     total_CPUs = psutil.cpu_count(),
     avg_loads = [x / psutil.cpu_count() * 100 for x in psutil.getloadavg()]
@@ -97,9 +97,9 @@ def main():  # Create instance of client with client ID “digi_mqtt_test”
 
     osValues = getOSValues()
     
-    print(logDict)
+    # print(logDict)
 
-    send_values_over_mqtt(logDict)
+    # send_values_over_mqtt(logDict)
 
 if __name__ == '__main__':
     main()
