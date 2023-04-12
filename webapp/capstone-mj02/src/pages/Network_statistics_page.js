@@ -43,6 +43,7 @@ function Networkstatisticspage() {
           <option value="">Select Device</option>
           <option value="router">Router</option>
           <option value="central">Central Node</option>
+          <option value="laptop">Laptop</option>
         </select>
       </div>
 
@@ -259,6 +260,34 @@ function Networkstatisticspage() {
           </p>
         </div>
       </div>
+      
+      )}
+      {device === "laptop" && ogNetworkDatas.length > 0&& (
+        <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-lg font-semibold mb-4">
+            Network Bandwidth Usage
+          </h2>
+          <p class="text-gray-600">2.4 GHz</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-lg font-semibold mb-4">Disk Usage</h2>
+      
+          <p class="text-gray-600">
+            {ogNetworkDatas[ogNetworkDatas.length - 1]["used_disk"]}/
+            {ogNetworkDatas[ogNetworkDatas.length - 1]["total_disk"]} MB
+          </p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-lg font-semibold mb-4">Memory Usage</h2>
+      
+          <p class="text-gray-600">
+            {ogNetworkDatas[ogNetworkDatas.length - 1]["used_memory"]}/
+            {ogNetworkDatas[ogNetworkDatas.length - 1]["total_memory"]} MB
+          </p>
+        </div>
+      
+        </div>
       
       )}
     </div>

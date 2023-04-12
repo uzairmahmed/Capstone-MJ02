@@ -81,7 +81,6 @@ function Powerusagegraph() {
           <option value="">Select Device</option>
           <option value="iOT_1">iOT_1</option>
           <option value="iOT_2">iOT_2</option>
-          <option value="iOT_3">iOT_3</option>
         </select>
       </div>
 
@@ -89,7 +88,7 @@ function Powerusagegraph() {
         <div>
           <select class="w-48 px-2 py-1 rounded-md text-gray-800 bg-gray-200 mt-2 ml-2" defaultValue="" onChange={(e) => setType(e.target.value)}>
             <option value="Live">Select an option</option>
-            <option value="Today">Today</option>
+            <option value="Live">Live</option>
             <option value="7_Days">Past 7 days</option>
             <option value="Month">Month</option>
             <option value="All">All</option>

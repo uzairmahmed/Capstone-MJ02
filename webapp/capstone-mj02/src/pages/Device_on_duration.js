@@ -249,7 +249,6 @@ function Deviceonduration() {
           <option value="">Select Device</option>
           <option value="iOT_1">iOT_1</option>
           <option value="iOT_2">iOT_2</option>
-          <option value="iOT_3">iOT_3</option>
         </select>
       </div>
       {device && (
