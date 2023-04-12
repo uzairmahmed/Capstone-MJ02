@@ -100,6 +100,7 @@ def main():  # Create instance of client with client ID “digi_mqtt_test”
         ("iOT_1/debug",      1),
         ("iOT_2/debug",      1),
         ("router/logs",     1),
+        ("laptop/logs",     1),
         ("central/logs",     1),
         ("iOT_1/logs",      1),
         ("iOT_2/logs",      1),

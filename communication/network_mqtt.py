@@ -75,6 +75,16 @@ def getOSValues():
         "network_logging": True,
     }
 
+    listed = list_connected_clients()
+    addresses = get_hosts()
+    connected_devices = parse_connected_clients(listed, addresses)
+
+    logDict = {
+      **vals,
+      "devices": connected_devices
+      }
+    
+    send_values_over_mqtt(logDict)
     return vals
 
 def send_values_over_mqtt(vals):
@@ -84,14 +94,9 @@ def send_values_over_mqtt(vals):
     mqttc.publish("router/logs", json.dumps(vals))
 
 def main():  # Create instance of client with client ID “digi_mqtt_test”
-    listed = list_connected_clients()
-    addresses = get_hosts()
-    connected_devices = parse_connected_clients(listed, addresses)
+
     osValues = getOSValues()
-    logDict = {
-      **osValues,
-      "devices": connected_devices
-      }
+    
     print(logDict)
 
     send_values_over_mqtt(logDict)
