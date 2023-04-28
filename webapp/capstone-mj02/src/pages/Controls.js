@@ -10,8 +10,8 @@ import Toggle from "../components/Toggle.jsx";
 function Controlspage() {
     const [hex, setHex] = useState("#fff");
     const [rgb, setRGB] = useState({ r: 255, g: 255, b: 255 });
-    const [device1, setDevice1] = useState(false);
-    const [device2, setDevice2] = useState(false);
+    const [device1, setDevice1] = useState(true);
+    const [device2, setDevice2] = useState(true);
     const [pickerOpen, setPickerOpen] = useState(false)
 
     useEffect(() => {
@@ -40,7 +40,8 @@ function Controlspage() {
 
     // Push Function
     async function Push (device, val) {
-
+        console.log(device1)
+        console.log(device2)
         var colString = (device !== 'iOT_1') ? 
         "[255, 255, 255]" : 
         String(rgb.r).padStart(3,0)+","+String(rgb.g).padStart(3,0)+","+String(rgb.b).padStart(3,0)
