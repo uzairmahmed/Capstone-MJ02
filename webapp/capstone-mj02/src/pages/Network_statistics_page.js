@@ -56,9 +56,6 @@ function Networkstatisticspage() {
               onChange={(e) => setClientSelection(e.target.value)}
             >
               <option value="">Select an option</option>
-              <option value="3C:61:05:D5:0A:9E">
-                Device 1 (3C:61:05:D5:0A:9E)
-              </option>
               <option value="AC:12:03:D6:B6:0E">
                 Device 2 (AC:12:03:D6:B6:0E)
               </option>
